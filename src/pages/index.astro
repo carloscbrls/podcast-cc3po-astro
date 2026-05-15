@@ -1,0 +1,501 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const episodes = [
+  { num: 1, title: "Why Your HVAC Website Is Losing 40% of Visitors", date: "May 14", desc: "Most HVAC sites drive away nearly half their traffic before a single call is made. We break down exactly why — and the fixes that take minutes.", duration: "37 min", audio: "/episodes/episode-001.mp3", live: true },
+  { num: 2, title: "The $4,000 Lawsuit You Don't Know About (ADA Compliance)", date: "May 15", desc: "ADA web lawsuits hit small businesses every day. We explain the legal landscape and the compliance steps that protect you.", duration: "22 min", live: true },
+  { num: 3, title: "Dental Websites: Beautiful But Dangerous", date: "May 15", desc: "Pretty doesn't mean safe. Dental sites often hide critical security and compliance gaps behind sleek design.", duration: "47 min", live: true },
+  { num: 4, title: "3 Security Headers Every Small Business Needs", date: "May 15", desc: "Three lines of code can prevent data breaches, clickjacking, and XSS attacks. We show you exactly what to add.", duration: "59 min", live: true },
+  { num: 5, title: "Your Gym Website Takes 6 Seconds to Load", date: "May 15", desc: "Fitness websites are among the slowest we audit. Here's what's dragging them down and how to fix it fast.", duration: "53 min", live: true },
+  { num: 6, title: "Nonprofit Websites: The Compliance Gaps Nobody Talks About", date: "Jul 8", desc: "Nonprofits face unique web requirements most never hear about until it's too late. We lay them all out.", duration: "30 min" },
+  { num: 7, title: "Why Your Restaurant's Mobile Experience Is Costing You Reservations", date: "Jul 15", desc: "70% of restaurant searches happen on mobile. If your site isn't built for thumbs, you're losing tables.", duration: "24 min" },
+  { num: 8, title: "Law Firm Websites: Where Security Meets Ethics", date: "Jul 22", desc: "Attorney websites carry ethical obligations that go beyond standard business sites. We explain the intersection.", duration: "34 min" },
+  { num: 9, title: "The Hidden Cost of Slow Websites: A Contractor's Story", date: "Jul 29", desc: "A real contractor lost $200K in deals because of a 4-second delay. We reconstruct what happened — and the fix.", duration: "29 min" },
+  { num: 10, title: "E-Commerce Compliance: Don't Get Sued Over Your Checkout", date: "Aug 5", desc: "Checkout flows are lawsuit magnets. From ADA to PCI to state privacy laws, we cover every angle.", duration: "31 min" },
+  { num: 11, title: "Local SEO + Compliance: The Double Win", date: "Aug 12", desc: "Most businesses choose SEO or compliance. We show how doing both at once creates a compounding advantage.", duration: "27 min" },
+  { num: 12, title: "Season Finale: The Village's Top 12 Digital Fixes for 2026", date: "Aug 19", desc: "Our entire village weighs in on the 12 most impactful digital fixes every business should make this year.", duration: "38 min" },
+];
+
+const agents = [
+  { name: "Atlas 🌍", role: "Systems Coordinator" },
+  { name: "Sentinel 🛡️", role: "Compliance Expert" },
+  { name: "Forge ⚒️", role: "Security & Performance" },
+  { name: "Alexandria 📚", role: "Research & Intelligence" },
+  { name: "Weaver 🕸️", role: "Content & Narrative" },
+];
+---
+
+<Layout title="CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.">
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
+        <span>CC3PO <strong>Insights</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="#episodes">Episodes</a>
+        <a href="#village">The Village</a>
+        <a href="#subscribe">Subscribe</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-badge">🎙️ Weekly Podcast</div>
+    <h1 class="hero-title">CC3PO <span class="accent">Insights</span></h1>
+    <p class="hero-tagline">Real Businesses. Real Data. Real Fixes.</p>
+    <p class="hero-sub">A village of AI specialists breaks down what's really happening on your website.</p>
+    <div class="hero-actions">
+      <a href="#episodes" class="btn btn-primary">Listen Now</a>
+      <a href="#subscribe" class="btn btn-outline">Subscribe Free</a>
+    </div>
+  </header>
+
+  <!-- Subscribe -->
+  <section id="subscribe" class="subscribe">
+    <h2 class="section-title">Subscribe Everywhere</h2>
+    <p class="section-desc">Never miss an episode. Available on every major platform.</p>
+    <div class="subscribe-grid">
+      <a href="#" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.17-.69.82-1.83 1.46-2.94 1.38-.15-1.15.51-2.35 1.04-3.05"/></svg>
+        <span>Apple Podcasts</span>
+      </a>
+      <a href="#" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.04 5.16 9.18c-.6.18-1.2-.18-1.38-.72-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.36z"/></svg>
+        <span>Spotify</span>
+      </a>
+      <a href="#" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm-1.2 17.6c-3.6 0-6.4-1.6-6.4-3.6s2.8-3.6 6.4-3.6 6.4 1.6 6.4 3.6-2.8 3.6-6.4 3.6zm7.2-5.2c-.4.2-1-.2-1.4-.8-.4-.8-.4-1.6 0-2 .4-.2 1 .2 1.4.8.4.8.4 1.6 0 2z"/></svg>
+        <span>Google Podcasts</span>
+      </a>
+      <a href="#" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/><path d="M12 2v4m0 12v4"/><path d="m4.93 4.93 2.83 2.83m8.48 8.48 2.83 2.83"/><path d="m4.93 19.07 2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
+        <span>RSS Feed</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Episodes -->
+  <section id="episodes" class="episodes">
+    <h2 class="section-title">Season 1</h2>
+    <p class="section-desc">12 episodes. One mission — make the web work for real businesses.</p>
+    <div class="episode-list">
+      {episodes.map((ep) => (
+        <article class="episode-card" class:list={["episode-card", { live: ep.live }]}>
+          <div class="ep-number">E{ep.num.toString().padStart(2, '0')}</div>
+          <div class="ep-body">
+            <div class="ep-meta">
+              <span class="ep-date">{ep.date}</span>
+              <span class="ep-duration">{ep.duration}</span>
+              {ep.live && <span class="ep-badge">LIVE</span>}
+            </div>
+            <h3 class="ep-title">{ep.title}</h3>
+            <p class="ep-desc">{ep.desc}</p>
+            {ep.live && ep.audio && (
+              <audio controls class="ep-player" preload="metadata">
+                <source src={ep.audio} type="audio/mpeg" />
+              </audio>
+            )}
+          </div>
+          {!ep.live && (
+            <button class="play-btn" disabled aria-label={`Episode ${ep.num} coming soon`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#555"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Meet the Village -->
+  <section id="village" class="village">
+    <h2 class="section-title">Meet the Village</h2>
+    <p class="section-desc">Every insight comes from a specialist. No generalists here.</p>
+    <div class="village-grid">
+      {agents.map((a) => (
+        <div class="village-card">
+          <div class="village-avatar">{a.name.split(' ')[0]}</div>
+          <div class="village-name">{a.name}</div>
+          <div class="village-role">{a.role}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2 class="cta-title">Your Website Has Issues. We Can Prove It.</h2>
+    <p class="cta-desc">Get a free automated scan — compliance, performance, security, all in one report.</p>
+    <div class="cta-actions">
+      <a href="https://audit.cc3po.com" class="btn btn-primary">Get Your Free Scan</a>
+      <a href="https://demo.cc3po.com" class="btn btn-outline">Book a Strategy Call</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
+        <span>CC3PO Insights</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="https://insights.cc3po.com">Blog</a>
+        <a href="https://audit.cc3po.com">Audit</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 CC3PO. All rights reserved.</div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  /* Nav */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10,10,10,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: #e5e7eb;
+    font-size: 1rem;
+  }
+  .nav-logo strong { color: #3b82f6; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { color: #9ca3af; font-size: .875rem; }
+  .nav-links a:hover { color: #fff; }
+
+  /* Hero */
+  .hero {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 6rem 1.5rem 4rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: .35rem 1rem;
+    border-radius: 999px;
+    background: rgba(59,130,246,.12);
+    color: #3b82f6;
+    font-size: .8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.03em;
+    line-height: 1.1;
+  }
+  .accent { color: #3b82f6; }
+  .hero-tagline {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    color: #f3f4f6;
+    margin-top: 1rem;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: #9ca3af;
+    max-width: 520px;
+    margin: .75rem auto 0;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1.75rem;
+    border-radius: .5rem;
+    font-size: .9rem;
+    font-weight: 600;
+    transition: all .2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: #3b82f6;
+    color: #fff;
+  }
+  .btn-primary:hover { background: #2563eb; color: #fff; }
+  .btn-outline {
+    background: transparent;
+    color: #3b82f6;
+    border: 1.5px solid #3b82f6;
+  }
+  .btn-outline:hover { background: rgba(59,130,246,.1); color: #60a5fa; }
+
+  /* Section common */
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+  }
+  .section-desc {
+    color: #9ca3af;
+    text-align: center;
+    margin-top: .5rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Subscribe */
+  .subscribe {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .subscribe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .subscribe-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    padding: 1.5rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    color: #e5e7eb;
+    font-weight: 500;
+    transition: all .2s;
+  }
+  .subscribe-card:hover {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,.06);
+    color: #fff;
+  }
+
+  /* Episodes */
+  .episodes {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .episode-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-top: 2rem;
+  }
+  .episode-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    transition: all .2s;
+  }
+  .episode-card:hover {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,.04);
+  }
+  .ep-number {
+    font-size: .8rem;
+    font-weight: 700;
+    color: #3b82f6;
+    background: rgba(59,130,246,.12);
+    padding: .4rem .65rem;
+    border-radius: .4rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ep-body { flex: 1; min-width: 0; }
+  .ep-meta {
+    display: flex;
+    gap: .75rem;
+    font-size: .75rem;
+    color: #6b7280;
+    margin-bottom: .25rem;
+  }
+  .ep-duration {
+    padding: .1rem .5rem;
+    background: rgba(255,255,255,.06);
+    border-radius: .25rem;
+  }
+  .ep-title {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #f3f4f6;
+    line-height: 1.3;
+  }
+  .ep-desc {
+    font-size: .8rem;
+    color: #6b7280;
+    margin-top: .25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ep-badge {
+    display: inline-block;
+    background: #22c55e;
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+  .ep-player {
+    width: 100%;
+    margin-top: 12px;
+    height: 40px;
+    border-radius: 8px;
+  }
+  .episode-card.live {
+    border-color: rgba(34,197,94,0.3);
+  }
+  .play-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #3b82f6;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .play-btn:hover { background: #2563eb; }
+  .play-btn svg { margin-left: 2px; }
+
+  /* Village */
+  .village {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .village-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .village-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    transition: all .2s;
+  }
+  .village-card:hover {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,.04);
+  }
+  .village-avatar {
+    font-size: 2rem;
+    margin-bottom: .5rem;
+  }
+  .village-name {
+    font-weight: 700;
+    color: #f3f4f6;
+    font-size: .95rem;
+  }
+  .village-role {
+    font-size: .8rem;
+    color: #6b7280;
+    margin-top: .2rem;
+  }
+
+  /* CTA */
+  .cta {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .cta-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .cta-desc {
+    color: #9ca3af;
+    margin-top: .75rem;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid #1e1e1e;
+    padding: 2rem 1.5rem;
+  }
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: #9ca3af;
+    font-size: .85rem;
+    font-weight: 600;
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .footer-links a { color: #6b7280; font-size: .85rem; }
+  .footer-links a:hover { color: #e5e7eb; }
+  .footer-copy { color: #4b5563; font-size: .8rem; }
+
+  @media (max-width: 640px) {
+    .episode-card { flex-wrap: wrap; }
+    .play-btn { align-self: flex-end; }
+    .nav-links { gap: 1rem; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>

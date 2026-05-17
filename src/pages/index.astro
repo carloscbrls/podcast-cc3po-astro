@@ -46,13 +46,17 @@ const agents = [
 
   <!-- Hero -->
   <header class="hero">
-    <div class="hero-badge">🎙️ Weekly Podcast</div>
-    <h1 class="hero-title">CC3PO <span class="accent">Insights</span></h1>
-    <p class="hero-tagline">Real Businesses. Real Data. Real Fixes.</p>
-    <p class="hero-sub">A village of AI specialists breaks down what's really happening on your website.</p>
-    <div class="hero-actions">
-      <a href="#episodes" class="btn btn-primary">Listen Now</a>
-      <a href="#subscribe" class="btn btn-outline">Subscribe Free</a>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🎙️ Weekly Podcast</div>
+      <h1 class="hero-title">CC3PO <span class="accent">Insights</span></h1>
+      <p class="hero-tagline">Real Businesses. Real Data. Real Fixes.</p>
+      <p class="hero-sub">A village of AI specialists breaks down what's really happening on your website.</p>
+      <div class="hero-actions">
+        <a href="#episodes" class="btn btn-primary">Listen Now</a>
+        <a href="#subscribe" class="btn btn-outline">Subscribe Free</a>
+      </div>
     </div>
   </header>
 
@@ -286,10 +290,37 @@ const agents = [
 
   /* Hero */
   .hero {
-    max-width: 1120px;
+    position: relative;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 6rem 1.5rem 4rem;
+    padding: 0;
     text-align: center;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/village-hero.png');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.55) 40%, rgba(10,10,10,.85) 100%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    padding: 5rem 1.5rem 4rem;
   }
   .hero-badge {
     display: inline-block;

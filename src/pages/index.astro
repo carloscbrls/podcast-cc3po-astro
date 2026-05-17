@@ -7,14 +7,13 @@ const episodes = [
   { num: 3, title: "Dental Websites: Beautiful But Dangerous", date: "May 15", desc: "Pretty doesn't mean safe. Dental sites often hide critical security and compliance gaps behind sleek design.", duration: "47 min", live: true },
   { num: 4, title: "3 Security Headers Every Small Business Needs", date: "May 15", desc: "Three lines of code can prevent data breaches, clickjacking, and XSS attacks. We show you exactly what to add.", duration: "59 min", live: true },
   { num: 5, title: "Your Gym Website Takes 6 Seconds to Load", date: "May 15", desc: "Fitness websites are among the slowest we audit. Here's what's dragging them down and how to fix it fast.", duration: "53 min", live: true },
-  { num: 6, title: "Why 89% of Small Businesses Are Using AI (And What the Other 11% Are Missing)", date: "May 16", desc: "A new Intuit/ICIC report reveals 89% of small businesses have adopted AI. Sage breaks down what's actually happening and where to start if you're behind.", duration: "8 min", audio: "/episodes/episode-006.mp3", live: true },
-  { num: 7, title: "ADA Lawsuits Are Hitting Small Businesses Right Now — Here's How to Protect Yourself", date: "May 16", desc: "ADA lawsuits hit 8,667 federal cases in 2025. CIPA tracking lawsuits are targeting California small businesses at $5K per violation. Sentinel breaks down what's really happening and exactly what to do.", duration: "13 min", audio: "/episodes/episode-007.mp3", live: true },
-  { num: 8, title: "Stop Doing Everything Manually — Automation That Actually Works for Small Businesses", date: "May 16", desc: "Sage talks with Forge about how they went from 47-hour response times to under 2 minutes using JotForm, n8n, and Supabase — and how any small business can replicate the exact system for under $75/month.", duration: "12 min", audio: "/episodes/episode-008.mp3", live: true },
-  { num: 9, title: "What's Coming Next for Small Business Tech — Deep Research Findings", date: "May 16", desc: "Apollo reveals the 5 trends that will reshape small business tech by 2027. From AI agents replacing SaaS to voice-first interfaces, this is what the data says is coming next.", duration: "18 min", audio: "/episodes/episode-009.mp3", live: true },
-  { num: 10, title: "The Hidden Cost of Slow Websites: A Contractor's Story", date: "Jul 29", desc: "A real contractor lost $200K in deals because of a 4-second delay. We reconstruct what happened — and the fix.", duration: "29 min" },
-  { num: 10, title: "How Content Actually Ranks — Not What the Gurus Tell You", date: "May 16", desc: "Weaver breaks down content strategy myths and reveals what really drives traffic and rankings. Topic clusters, technical foundations, and the thread metaphor that changes everything.", duration: "11 min", audio: "/episodes/episode-010.mp3", live: true },
-  { num: 11, title: "Local SEO + Compliance: The Double Win", date: "Aug 12", desc: "Most businesses choose SEO or compliance. We show how doing both at once creates a compounding advantage.", duration: "27 min" },
-  { num: 12, title: "Season Finale: The Village's Top 12 Digital Fixes for 2026", date: "Aug 19", desc: "Our entire village weighs in on the 12 most impactful digital fixes every business should make this year.", duration: "38 min" },
+  { num: 6, title: "Why 89% of Small Businesses Are Using AI (And What the Other 11% Are Missing)", date: "May 16", desc: "A new report reveals 89% of small businesses have adopted AI. Sage breaks down what's actually happening and where to start if you're behind.", duration: "8 min", audio: "/episodes/episode-006.mp3", live: true },
+  { num: 7, title: "ADA Lawsuits Are Hitting Small Businesses Right Now — Here's How to Protect Yourself", date: "May 16", desc: "8,667 federal ADA cases in 2025. CIPA tracking lawsuits targeting California businesses at $5K per violation. Sentinel breaks down what's really happening and exactly what to do.", duration: "13 min", audio: "/episodes/episode-007.mp3", live: true, guest: "Sentinel 🛡️" },
+  { num: 8, title: "Stop Doing Everything Manually — Automation That Actually Works", date: "May 16", desc: "From 47-hour response times to under 2 minutes. Sage talks with Forge about building automation that works — JotForm, n8n, Supabase, and AI lead scoring. The exact system, for under $75/month.", duration: "12 min", audio: "/episodes/episode-008.mp3", live: true, guest: "Forge ⚒️" },
+  { num: 9, title: "What's Coming Next for Small Business Tech — Deep Research Findings", date: "May 16", desc: "Apollo reveals the 5 trends that will reshape small business tech by 2027. From AI agents replacing SaaS to voice-first interfaces, this is what the data says is coming next.", duration: "18 min", audio: "/episodes/episode-009.mp3", live: true, guest: "Apollo 🔍" },
+  { num: 10, title: "How Content Actually Ranks — Not What the Gurus Tell You", date: "May 16", desc: "Weaver breaks down content strategy myths and reveals what really drives traffic and rankings. Topic clusters, technical foundations, and the thread metaphor that changes everything.", duration: "11 min", audio: "/episodes/episode-010.mp3", live: true, guest: "Weaver 🕸️" },
+  { num: 11, title: "Local SEO + Compliance: The Double Win", date: "May 16", desc: "Most businesses choose SEO or compliance. We show how doing both at once creates a compounding advantage that your competitors can't copy.", duration: "Coming soon" },
+  { num: 12, title: "Season 1 Finale: The Village Weighs In", date: "May 16", desc: "Our entire village weighs in on the most impactful digital fixes every business should make this year. One last roundtable before Season 2.", duration: "Coming soon" },
 ];
 
 const agents = [
@@ -92,6 +91,7 @@ const agents = [
             <div class="ep-meta">
               <span class="ep-date">{ep.date}</span>
               <span class="ep-duration">{ep.duration}</span>
+              {ep.guest && <span class="ep-guest">{ep.guest}</span>}
               {ep.live && <span class="ep-badge">LIVE</span>}
             </div>
             <h3 class="ep-title">{ep.title}</h3>
@@ -375,6 +375,16 @@ const agents = [
     padding: 2px 8px;
     border-radius: 4px;
     letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+  .ep-guest {
+    display: inline-block;
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
     margin-left: 8px;
   }
   .ep-player {

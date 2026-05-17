@@ -38,6 +38,7 @@ const agents = [
       <div class="nav-links">
         <a href="#episodes">Episodes</a>
         <a href="#village">The Village</a>
+        <a href="#connect">Get Involved</a>
         <a href="#subscribe">Subscribe</a>
       </div>
     </div>
@@ -140,14 +141,99 @@ const agents = [
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta">
-    <h2 class="cta-title">Your Website Has Issues. We Can Prove It.</h2>
-    <p class="cta-desc">Get a free automated scan — compliance, performance, security, all in one report.</p>
-    <div class="cta-actions">
-      <a href="https://audit.cc3po.com" class="btn btn-primary">Get Your Free Scan</a>
-      <a href="https://demo.cc3po.com" class="btn btn-outline">Book a Strategy Call</a>
+  <!-- Connect -->
+  <section id="connect" class="connect">
+    <h2 class="section-title">Want In?</h2>
+    <p class="section-desc">Whether you need a free website scan, want to be a guest on the show, or just have a question — we're here.</p>
+    <div class="connect-grid">
+      <div class="connect-card">
+        <div class="connect-icon">🔍</div>
+        <h3 class="connect-heading">Free Website Scan</h3>
+        <p class="connect-text">Compliance, performance, security — get your full report in under 60 seconds.</p>
+        <a href="https://audit.cc3po.com" class="btn btn-primary btn-sm">Scan My Site</a>
+      </div>
+      <div class="connect-card">
+        <div class="connect-icon">🎙️</div>
+        <h3 class="connect-heading">Be a Guest</h3>
+        <p class="connect-text">Have a story about small business tech, compliance, or automation? We'd love to have you on.</p>
+        <a href="#guest-form" class="btn btn-outline btn-sm">Apply to Be a Guest</a>
+      </div>
+      <div class="connect-card">
+        <div class="connect-icon">💬</div>
+        <h3 class="connect-heading">Ask Us Anything</h3>
+        <p class="connect-text">Questions about your website, compliance, or what we cover on the show? Drop us a line.</p>
+        <a href="#contact-form" class="btn btn-outline btn-sm">Send a Message</a>
+      </div>
     </div>
+  </section>
+
+  <!-- Guest Form -->
+  <section id="guest-form" class="form-section">
+    <h2 class="section-title">Apply to Be a Guest</h2>
+    <p class="section-desc">We're always looking for small business owners, compliance experts, and tech builders who have real stories to share.</p>
+    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="guest-name">Your Name *</label>
+          <input type="text" id="guest-name" name="name" required placeholder="Jane Doe" />
+        </div>
+        <div class="form-group">
+          <label for="guest-email">Email *</label>
+          <input type="email" id="guest-email" name="email" required placeholder="jane@company.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="guest-business">Business / Organization</label>
+          <input type="text" id="guest-business" name="business" placeholder="Company or business name" />
+        </div>
+        <div class="form-group">
+          <label for="guest-topic">What would you talk about?</label>
+          <select id="guest-topic" name="topic">
+            <option value="">Choose a topic...</option>
+            <option value="compliance">ADA / Web Compliance</option>
+            <option value="automation">Automation & AI</option>
+            <option value="seo">SEO & Local Search</option>
+            <option value="security">Website Security</option>
+            <option value="content">Content Strategy</option>
+            <option value="small-biz">Small Business Tech</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label for="guest-story">Tell us your story *</label>
+        <textarea id="guest-story" name="story" rows="4" required placeholder="What experience or insight would you share on the show?"></textarea>
+      </div>
+      <input type="hidden" name="source" value="podcast-guest" />
+      <input type="hidden" name="page" value="podcast.cc3po.com" />
+      <button type="submit" class="btn btn-primary btn-full">Submit Guest Application</button>
+    </form>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact-form" class="form-section">
+    <h2 class="section-title">Get in Touch</h2>
+    <p class="section-desc">Have a question about the show, a topic suggestion, or just want to say hi?</p>
+    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contact-name">Name *</label>
+          <input type="text" id="contact-name" name="name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email *</label>
+          <input type="email" id="contact-email" name="email" required placeholder="you@email.com" />
+        </div>
+      </div>
+      <div class="form-group full">
+        <label for="contact-message">Message *</label>
+        <textarea id="contact-message" name="message" rows="4" required placeholder="What's on your mind?"></textarea>
+      </div>
+      <input type="hidden" name="source" value="podcast-contact" />
+      <input type="hidden" name="page" value="podcast.cc3po.com" />
+      <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+    </form>
   </section>
 
   <!-- Footer -->
@@ -429,6 +515,115 @@ const agents = [
   .listen-btn.apple:hover { border-color: #fc3c44; background: rgba(252,60,68,.08); color: #fc3c44; }
   .listen-btn.share:hover { border-color: #60a5fa; }
   .play-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Connect section */
+  .connect {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .connect-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .connect-card {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all .2s;
+  }
+  .connect-card:hover {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,.04);
+  }
+  .connect-icon {
+    font-size: 2rem;
+    margin-bottom: .75rem;
+  }
+  .connect-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin-bottom: .5rem;
+  }
+  .connect-text {
+    font-size: .85rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .btn-sm {
+    padding: .5rem 1.25rem;
+    font-size: .8rem;
+  }
+  .btn-full {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Form section */
+  .form-section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .podcast-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+  }
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+  .form-group label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: #d1d5db;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: .5rem;
+    padding: .65rem .85rem;
+    color: #f3f4f6;
+    font-size: .9rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color .2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,.15);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #6b7280;
+  }
+
+  @media (max-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
   .ep-player {
     width: 100%;
     margin-top: 12px;

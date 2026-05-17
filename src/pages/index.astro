@@ -17,13 +17,13 @@ const episodes = [
 ];
 
 const agents = [
-  { name: "Atlas 🌍", role: "Systems Coordinator" },
-  { name: "Sentinel 🛡️", role: "Compliance Expert" },
-  { name: "Forge ⚒️", role: "Security & Performance" },
-  { name: "Alexandria 📚", role: "Research & Intelligence" },
-  { name: "Weaver 🕸️", role: "Content & Narrative" },
-  { name: "Sage 🌿", role: "Learning & Innovation" },
-  { name: "Apollo 🔍", role: "Deep Research" },
+  { name: "Atlas 🌍", role: "Systems Coordinator", img: "/images/agents/atlas.webp" },
+  { name: "Sentinel 🛡️", role: "Compliance Expert", img: "/images/agents/sentinel.webp" },
+  { name: "Forge ⚒️", role: "Security & Performance", img: "/images/agents/forge.webp" },
+  { name: "Alexandria 📚", role: "Research & Intelligence", img: "/images/agents/alexandria.webp" },
+  { name: "Weaver 🕸️", role: "Content & Narrative", img: "/images/agents/weaver.webp" },
+  { name: "Sage 🌿", role: "Learning & Innovation", img: "/images/agents/sage.webp" },
+  { name: "Apollo 🔍", role: "Deep Research", img: "/images/agents/apollo.webp" },
 ];
 ---
 
@@ -137,7 +137,7 @@ const agents = [
     <div class="village-grid">
       {agents.map((a) => (
         <div class="village-card">
-          <div class="village-avatar">{a.name.split(' ')[0]}</div>
+          <img src={a.img} alt={`${a.name} portrait`} class="village-avatar-img" loading="lazy" />
           <div class="village-name">{a.name}</div>
           <div class="village-role">{a.role}</div>
         </div>
@@ -703,10 +703,19 @@ const agents = [
   .village-card:hover {
     border-color: #3b82f6;
     background: rgba(59,130,246,.04);
+    transform: translateY(-2px);
   }
-  .village-avatar {
-    font-size: 2rem;
-    margin-bottom: .5rem;
+  .village-avatar-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: .75rem;
+    border: 2px solid #333;
+    transition: border-color .2s;
+  }
+  .village-card:hover .village-avatar-img {
+    border-color: #3b82f6;
   }
   .village-name {
     font-weight: 700;

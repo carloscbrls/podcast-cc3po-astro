@@ -85,7 +85,7 @@ const agents = [
     <p class="section-desc">12 episodes. One mission — make the web work for real businesses.</p>
     <div class="episode-list">
       {episodes.map((ep) => (
-        <article class="episode-card" class:list={["episode-card", { live: ep.live }]}>
+        <article id={`ep${ep.num}`} class="episode-card" class:list={["episode-card", { live: ep.live }]}>
           <div class="ep-number">E{ep.num.toString().padStart(2, '0')}</div>
           <div class="ep-body">
             <div class="ep-meta">
@@ -100,6 +100,19 @@ const agents = [
               <audio controls class="ep-player" preload="metadata">
                 <source src={ep.audio} type="audio/mpeg" />
               </audio>
+            )}
+            {ep.live && (
+              <div class="ep-listen">
+                <a href={`https://open.spotify.com/show/033gZyn9HnFLsOH8aCwjNp`} class="listen-btn spotify" target="_blank" rel="noopener">
+                  🎧 Spotify
+                </a>
+                <a href={`https://podcasts.apple.com/us/podcast/cc3po-insights/id1896678753`} class="listen-btn apple" target="_blank" rel="noopener">
+                  🍎 Apple Podcasts
+                </a>
+                <a href={`https://podcast.cc3po.com/#ep${ep.num}`} class="listen-btn share" target="_blank" rel="noopener" title="Copy link to this episode">
+                  🔗 Share
+                </a>
+              </div>
             )}
           </div>
           {!ep.live && (
@@ -387,6 +400,35 @@ const agents = [
     border-radius: 4px;
     margin-left: 8px;
   }
+  .ep-listen {
+    display: flex;
+    gap: .5rem;
+    margin-top: .5rem;
+    flex-wrap: wrap;
+  }
+  .listen-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .75rem;
+    border-radius: .375rem;
+    font-size: .75rem;
+    font-weight: 600;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .listen-btn:hover {
+    border-color: #3b82f6;
+    background: rgba(59,130,246,.08);
+    color: #fff;
+  }
+  .listen-btn.spotify:hover { border-color: #1db954; background: rgba(29,185,84,.08); color: #1db954; }
+  .listen-btn.apple:hover { border-color: #fc3c44; background: rgba(252,60,68,.08); color: #fc3c44; }
+  .listen-btn.share:hover { border-color: #60a5fa; }
+  .play-btn:disabled { opacity: .4; cursor: not-allowed; }
   .ep-player {
     width: 100%;
     margin-top: 12px;

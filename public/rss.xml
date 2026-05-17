@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:podcast="https://podcastindex.org/namespace/1.0">
+  <channel>
+    <title>CC3PO Insights</title>
+    <link>https://podcast.cc3po.com</link>
+    <language>en-us</language>
+    <copyright>© 2026 CC3PO</copyright>
+    <description>Real Businesses. Real Data. Real Fixes. A village of AI specialists breaks down what's really happening on your website — ADA compliance, SEO, automation, content strategy, and more.</description>
+    <itunes:type>episodic</itunes:type>
+    <itunes:author>CC3PO</itunes:author>
+    <itunes:summary>Real Businesses. Real Data. Real Fixes. A village of AI specialists breaks down what's really happening on your website — ADA compliance, SEO, automation, content strategy, and more.</itunes:summary>
+    <itunes:owner>
+      <itunes:name>CC3PO</itunes:name>
+      <itunes:email>legal@cc3po.com</itunes:email>
+    </itunes:owner>
+    <itunes:image>https://podcast.cc3po.com/cc3po-podcast-cover.png</itunes:image>
+    <itunes:category text="Business" />
+    <itunes:category text="Technology" />
+    <itunes:explicit>false</itunes:explicit>
+    <image>
+      <url>https://podcast.cc3po.com/cc3po-podcast-cover.png</url>
+      <title>CC3PO Insights</title>
+      <link>https://podcast.cc3po.com</link>
+    </image>
+
+    <item>
+      <title>Why Your HVAC Website Is Losing 40% of Visitors</title>
+      <link>https://podcast.cc3po.com/#ep1</link>
+      <description>Most HVAC sites drive away nearly half their traffic before a single call is made. We break down exactly why — and the fixes that take minutes.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-001.mp3" length="35392827" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-001</guid>
+      <pubDate>Wed, 14 May 2026 00:00:00 GMT</pubDate>
+      <itunes:duration>37:00</itunes:duration>
+      <itunes:title>Why Your HVAC Website Is Losing 40% of Visitors</itunes:title>
+      <itunes:episode>1</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>Why 89% of Small Businesses Are Using AI</title>
+      <link>https://podcast.cc3po.com/#ep6</link>
+      <description>A new report reveals 89% of small businesses have adopted AI. Sage breaks down what's actually happening and where to start if you're behind.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-006.mp3" length="7219035" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-006</guid>
+      <pubDate>Fri, 16 May 2026 12:00:00 GMT</pubDate>
+      <itunes:duration>8:00</itunes:duration>
+      <itunes:title>Why 89% of Small Businesses Are Using AI</itunes:title>
+      <itunes:episode>6</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>ADA Lawsuits Are Hitting Small Businesses Right Now</title>
+      <link>https://podcast.cc3po.com/#ep7</link>
+      <description>8,667 federal ADA cases in 2025. CIPA tracking lawsuits targeting California businesses at $5K per violation. Sentinel breaks down what's really happening and exactly what to do.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-007.mp3" length="17014535" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-007</guid>
+      <pubDate>Fri, 16 May 2026 14:00:00 GMT</pubDate>
+      <itunes:duration>13:00</itunes:duration>
+      <itunes:title>ADA Lawsuits Are Hitting Small Businesses Right Now</itunes:title>
+      <itunes:episode>7</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>Stop Doing Everything Manually — Automation That Actually Works</title>
+      <link>https://podcast.cc3po.com/#ep8</link>
+      <description>From 47-hour response times to under 2 minutes. Sage talks with Forge about building automation that works — JotForm, n8n, Supabase, and AI lead scoring.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-008.mp3" length="8061249" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-008</guid>
+      <pubDate>Fri, 16 May 2026 16:00:00 GMT</pubDate>
+      <itunes:duration>12:00</itunes:duration>
+      <itunes:title>Stop Doing Everything Manually — Automation That Actually Works</itunes:title>
+      <itunes:episode>8</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>What's Coming Next for Small Business Tech</title>
+      <link>https://podcast.cc3po.com/#ep9</link>
+      <description>Apollo reveals the 5 trends that will reshape small business tech by 2027. From AI agents replacing SaaS to voice-first interfaces.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-009.mp3" length="25360971" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-009</guid>
+      <pubDate>Fri, 16 May 2026 18:00:00 GMT</pubDate>
+      <itunes:duration>18:00</itunes:duration>
+      <itunes:title>What's Coming Next for Small Business Tech</itunes:title>
+      <itunes:episode>9</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>How Content Actually Ranks — Not What the Gurus Tell You</title>
+      <link>https://podcast.cc3po.com/#ep10</link>
+      <description>Weaver breaks down content strategy myths. Topic clusters, technical foundations, and the thread metaphor that changes everything.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-010.mp3" length="15385748" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-010</guid>
+      <pubDate>Fri, 16 May 2026 19:00:00 GMT</pubDate>
+      <itunes:duration>11:00</itunes:duration>
+      <itunes:title>How Content Actually Ranks — Not What the Gurus Tell You</itunes:title>
+      <itunes:episode>10</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>Local SEO + Compliance: The Double Win</title>
+      <link>https://podcast.cc3po.com/#ep11</link>
+      <description>Scout reveals why WCAG-compliant businesses rank up to 30% higher in local search. The five overlaps that make SEO and compliance one project with two payoffs.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-011.mp3" length="1" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-011</guid>
+      <pubDate>Fri, 16 May 2026 20:00:00 GMT</pubDate>
+      <itunes:duration>14:00</itunes:duration>
+      <itunes:title>Local SEO + Compliance: The Double Win</itunes:title>
+      <itunes:episode>11</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+    <item>
+      <title>Season 1 Finale: The Village Weighs In</title>
+      <link>https://podcast.cc3po.com/#ep12</link>
+      <description>The Season 1 finale brings the whole village together. Sentinel, Forge, Apollo, Weaver, and Scout each deliver their #1 insight. Sage ties it all together.</description>
+      <enclosure url="https://podcast.cc3po.com/episodes/episode-012.mp3" length="1" type="audio/mpeg" />
+      <guid isPermaLink="false">cc3po-insights-episode-012</guid>
+      <pubDate>Fri, 16 May 2026 21:00:00 GMT</pubDate>
+      <itunes:duration>4:00</itunes:duration>
+      <itunes:title>Season 1 Finale: The Village Weighs In</itunes:title>
+      <itunes:episode>12</itunes:episode>
+      <itunes:season>1</itunes:season>
+    </item>
+
+  </channel>
+</rss>

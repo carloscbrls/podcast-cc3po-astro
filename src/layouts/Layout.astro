@@ -45,6 +45,8 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
     <meta name="twitter:image" content={image} />
     <meta name="twitter:site" content="@cc3po3" />
     <meta name="twitter:creator" content="@cc3po3" />
+    <meta name="robots" content="index, follow" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -59,6 +61,29 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
     <main id="main-content">
       <slot />
     </main>
+  
+    <!-- Compliance Footer -->
+    <footer style="background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.05);padding:32px 24px;text-align:center;color:#71717a;font-size:13px;">
+      <p>&copy; 2024–2026 CC3PO LLC. All rights reserved.</p>
+      <p style="margin-top:8px;font-size:12px;">
+        <a href="https://cc3po.com/privacy" style="color:#60a5fa;">Privacy Policy</a> · 
+        <a href="https://cc3po.com/terms" style="color:#60a5fa;">Terms of Service</a> · 
+        <a href="https://cc3po.com/disclaimer" style="color:#60a5fa;">Disclaimer</a>
+      </p>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,11,0.98);border-top:1px solid rgba(76,201,240,0.2);padding:16px 24px;z-index:9999;display:none;">
+      <div style="max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+        <span style="color:rgba(255,255,255,0.7);font-size:13px;">We use cookies for analytics and to improve your experience. <a href="https://cc3po.com/privacy" style="color:#60a5fa;">Learn more</a></span>
+        <div style="display:flex;gap:10px;">
+          <button id="cookie-accept" style="padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:#4cc9f0;color:#0a0a0b;">Accept</button>
+        </div>
+      </div>
+    </div>
+    <script is:inline>
+      (function(){var b=document.getElementById('cookie-banner'),a=document.getElementById('cookie-accept');if(!b||!a)return;var c=localStorage.getItem('cc3po_cookie_consent');if(!c)b.style.display='block';a.addEventListener('click',function(){localStorage.setItem('cc3po_cookie_consent','accepted');b.style.display='none'})})();
+    </script>
   </body>
 </html>
 

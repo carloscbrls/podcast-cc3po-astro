@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Soundscape from '../components/Soundscape.astro';
 
 const episodes = [
   { num: 1, title: "Why Your HVAC Website Is Losing 40% of Visitors", date: "May 14", desc: "Most HVAC sites drive away nearly half their traffic before a single call is made. We break down exactly why — and the fixes that take minutes.", duration: "37 min", audio: "/episodes/episode-001.mp3", live: true },
@@ -130,6 +131,9 @@ const agents = [
       ))}
     </div>
   </section>
+
+  <!-- Behind the AI Soundscape -->
+  <Soundscape />
 
   <!-- Meet the Village -->
   <section id="village" class="village">

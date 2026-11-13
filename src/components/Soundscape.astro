@@ -1,0 +1,386 @@
+---
+/**
+ * Soundscape.astro
+ *
+ * The "Behind the AI Soundscape" + "Short-Form Cross-Pollination" pillars.
+ *
+ * The videos below are REAL finished assets that already exist in the
+ * village's production folder (content/music/downloads). This section makes
+ * them reachable — which they were not: the music videos existed on disk and
+ * the podcast site had an orphaned demo reel that nothing linked to.
+ *
+ * Everything is served from this site's own /media path, so the links are
+ * same-origin and cannot rot.
+ */
+const SHORTS = [
+  {
+    src: '/media/ya-me-conozco-village-edition-vertical-720.mp4',
+    poster: '/media/posters/ya-me-conozco-village-edition-vertical-720.jpg',
+    title: 'Ya Me Conozco — Village Edition',
+    meta: '1080×1920 · 191s',
+    note: 'The village reads itself back to you. Vertical cut, web-optimised.',
+    tag: 'Short-form',
+  },
+  {
+    src: '/media/weaver-narration-vertical-720.mp4',
+    poster: '/media/posters/weaver-narration-vertical-720.jpg',
+    title: 'Weaver — narration',
+    meta: '1080×1920 · 55s',
+    note: 'The shortest native vertical. The one that made it onto Shorts.',
+    tag: 'Short-form',
+  },
+  {
+    src: '/media/cc3po-mix-vol1-the-journey-vertical-720.mp4',
+    poster: '/media/posters/cc3po-mix-vol1-the-journey-vertical-720.jpg',
+    title: 'CC3PO Mix Vol. 1 — The Journey',
+    meta: '1080×1920 · 251s',
+    note: 'Full-length visualizer. Dembow pulse, R&B underneath, code falling behind.',
+    tag: 'Visualizer',
+  },
+  {
+    src: '/media/compliance-scanner-demo-reel.mp4',
+    poster: '/media/posters/compliance-scanner-demo-reel.jpg',
+    title: 'Compliance scanner — demo reel',
+    meta: '1920×1080',
+    note: 'What the free 30-second scan actually does, end to end.',
+    tag: 'Tech',
+  },
+];
+
+const TRACKS = [
+  {
+    title: 'Code of Connection',
+    album: 'The Human Interface',
+    bpm: '92',
+    mood: 'Zero lag / syncing souls',
+    accent: '#38bdf8',
+  },
+  {
+    title: 'Two-Factor Love',
+    album: 'The Human Interface',
+    bpm: '86',
+    mood: 'Multi-layer authentication / proof of trust',
+    accent: '#fb923c',
+  },
+  {
+    title: 'Touchscreen Soul',
+    album: 'The Human Interface',
+    bpm: '89',
+    mood: 'Signal connection through glass',
+    accent: '#a78bfa',
+  },
+  {
+    title: 'Por Dentro Muerto',
+    album: 'Dos Duelos',
+    bpm: '—',
+    mood: 'Dead inside, still transmitting',
+    accent: '#f43f5e',
+  },
+];
+---
+
+<section id="soundscape" class="soundscape" aria-labelledby="soundscape-title">
+  <div class="soundscape-inner">
+    <p class="soundscape-eyebrow">Behind the AI soundscape</p>
+    <h2 id="soundscape-title" class="soundscape-title">
+      The part where the machine and the voice argue.
+    </h2>
+    <p class="soundscape-lede">
+      Every CC3PO track is dressed in the sound of the machine it is about —
+      boot chimes, dial tones, error beeps, the static of a signal you are
+      about to lose. These are the finished cuts, and the tempo spine behind
+      them, measured from the delivered masters.
+    </p>
+
+    <div class="soundscape-videos">
+      {SHORTS.map((v) => (
+        <article class="soundscape-card">
+          <div class="soundscape-frame">
+            <video
+              controls
+              preload="none"
+              playsinline
+              src={v.src}
+              poster={v.poster ?? undefined}
+              aria-label={v.title}
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="soundscape-body">
+            <span class="soundscape-tag">{v.tag}</span>
+            <h3 class="soundscape-card-title">{v.title}</h3>
+            <p class="soundscape-meta">{v.meta}</p>
+            <p class="soundscape-note">{v.note}</p>
+            <a class="soundscape-dl" href={v.src} download>
+              Download the file ↓
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <h3 class="soundscape-sub">The tempo spine</h3>
+    <p class="soundscape-sub-lede">
+      BPM measured from the delivered masters — not typed in by hand.
+    </p>
+    <ul class="soundscape-tracks">
+      {TRACKS.map((t) => (
+        <li class="soundscape-track" style={`--accent:${t.accent}`}>
+          <span class="soundscape-track-bpm">{t.bpm}</span>
+          <span class="soundscape-track-body">
+            <span class="soundscape-track-title">{t.title}</span>
+            <span class="soundscape-track-album">{t.album}</span>
+          </span>
+          <span class="soundscape-track-mood">{t.mood}</span>
+        </li>
+      ))}
+    </ul>
+
+    <div class="soundscape-cta">
+      <h3 class="soundscape-cta-title">Hear the rest.</h3>
+      <p>
+        48 releases, 459 tracks, 23 genres — every one measured from the
+        masters that ship.
+      </p>
+      <div class="soundscape-cta-links">
+        <a class="soundscape-cta-btn" href="https://music.cc3po.com/discography">
+          The full catalogue →
+        </a>
+        <a
+          class="soundscape-cta-btn soundscape-cta-btn-secondary"
+          href="https://scanner.cc3po.com"
+        >
+          Scan your own site free →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .soundscape {
+    background: #08080c;
+    color: #e8eaf0;
+    padding: 5rem 1.25rem;
+  }
+  .soundscape-inner {
+    max-width: 68rem;
+    margin: 0 auto;
+  }
+  .soundscape-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    text-align: center;
+    margin: 0 0 1rem;
+  }
+  .soundscape-title {
+    font-size: clamp(1.8rem, 5vw, 2.9rem);
+    font-weight: 300;
+    line-height: 1.15;
+    text-align: center;
+    margin: 0 0 1.25rem;
+    color: #f4f6fa;
+  }
+  .soundscape-lede {
+    max-width: 44rem;
+    margin: 0 auto 3rem;
+    text-align: center;
+    color: #a7b0c2;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .soundscape-videos {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+  @media (min-width: 700px) {
+    .soundscape-videos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .soundscape-videos {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .soundscape-card {
+    background: #101017;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .soundscape-frame {
+    background: #000;
+    aspect-ratio: 9 / 16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .soundscape-frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .soundscape-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .soundscape-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    margin-bottom: 0.4rem;
+  }
+  .soundscape-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f4f6fa;
+    margin: 0 0 0.2rem;
+    line-height: 1.35;
+  }
+  .soundscape-meta {
+    font-size: 0.72rem;
+    color: #6b7280;
+    margin: 0 0 0.55rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .soundscape-note {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #a7b0c2;
+    margin: 0 0 0.9rem;
+    flex-grow: 1;
+  }
+  .soundscape-dl {
+    font-size: 0.8rem;
+    color: #22d3ee;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .soundscape-dl:hover {
+    text-decoration: underline;
+  }
+
+  .soundscape-sub {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #f4f6fa;
+    margin: 0 0 0.4rem;
+  }
+  .soundscape-sub-lede {
+    color: #a7b0c2;
+    margin: 0 0 1.25rem;
+    font-size: 0.92rem;
+  }
+  .soundscape-tracks {
+    list-style: none;
+    margin: 0 0 3rem;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  @media (min-width: 800px) {
+    .soundscape-tracks {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .soundscape-track {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: #101017;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0.55rem;
+    padding: 0.8rem 1rem;
+  }
+  .soundscape-track-bpm {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 2.4rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .soundscape-track-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .soundscape-track-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e8eaf0;
+  }
+  .soundscape-track-album {
+    font-size: 0.74rem;
+    color: #6b7280;
+  }
+  .soundscape-track-mood {
+    margin-left: auto;
+    font-size: 0.76rem;
+    color: #a7b0c2;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (max-width: 560px) {
+    .soundscape-track-mood {
+      display: none;
+    }
+  }
+
+  .soundscape-cta {
+    background: linear-gradient(135deg, #0f1b22, #171329);
+    border: 1px solid rgba(34, 211, 238, 0.22);
+    border-radius: 1rem;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+  }
+  .soundscape-cta-title {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: #f4f6fa;
+    margin: 0 0 0.5rem;
+  }
+  .soundscape-cta p {
+    color: #a7b0c2;
+    margin: 0 0 1.4rem;
+    font-size: 0.95rem;
+  }
+  .soundscape-cta-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  .soundscape-cta-btn {
+    display: inline-block;
+    background: #22d3ee;
+    color: #06121a;
+    font-weight: 700;
+    padding: 0.8rem 1.4rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .soundscape-cta-btn-secondary {
+    background: transparent;
+    color: #e8eaf0;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+  .soundscape-cta-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.07);
+  }
+</style>

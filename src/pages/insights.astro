@@ -181,7 +181,7 @@ const agents = [
   <section id="guest-form" class="form-section">
     <h2 class="section-title">Apply to Be a Guest</h2>
     <p class="section-desc">We're always looking for small business owners, compliance experts, and tech builders who have real stories to share.</p>
-    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+    <form class="podcast-form" id="podcast-guest-form" novalidate>
       <div class="form-row">
         <div class="form-group">
           <label for="guest-name">Your Name *</label>
@@ -218,6 +218,7 @@ const agents = [
       <input type="hidden" name="source" value="podcast-guest" />
       <input type="hidden" name="page" value="podcast.cc3po.com" />
       <button type="submit" class="btn btn-primary btn-full">Submit Guest Application</button>
+      <p class="form-status" role="status" aria-live="polite" style="display:none;margin-top:12px;"></p>
     </form>
   </section>
 
@@ -225,7 +226,7 @@ const agents = [
   <section id="contact-form" class="form-section">
     <h2 class="section-title">Get in Touch</h2>
     <p class="section-desc">Have a question about the show, a topic suggestion, or just want to say hi?</p>
-    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+    <form class="podcast-form" id="podcast-contact-form" novalidate>
       <div class="form-row">
         <div class="form-group">
           <label for="contact-name">Name *</label>
@@ -243,8 +244,52 @@ const agents = [
       <input type="hidden" name="source" value="podcast-contact" />
       <input type="hidden" name="page" value="podcast.cc3po.com" />
       <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+      <p class="form-status" role="status" aria-live="polite" style="display:none;margin-top:12px;"></p>
     </form>
   </section>
+
+  <script>
+    // Podcast forms write directly to the Supabase leads table (same pipe as
+    // cc3po.com). Replaced the dead Formspree endpoint 2026-11-24 — the old
+    // form ID did not exist in the account, so submissions were lost.
+    (function () {
+      var ENDPOINT = "https://cdrcgmdvepxwsbqaifxv.supabase.co/rest/v1/leads";
+      var ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkcmNnbWR2ZXB4d3NicWFpZnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MDY4MDksImV4cCI6MjA4OTA4MjgwOX0.pKWLWvsSimTOMkpaXKKrLJESrQEMUayUU1c9ANzr1Dc";
+      function wire(formId, build) {
+        var form = document.getElementById(formId);
+        if (!form) return;
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var status = form.querySelector(".form-status");
+          var button = form.querySelector("button[type=submit]");
+          var show = function (msg, ok) {
+            status.style.display = "block";
+            status.textContent = msg;
+            status.style.color = ok ? "#4ade80" : "#f87171";
+          };
+          if (!form.checkValidity()) { show("Please fill in the required fields.", false); form.reportValidity(); return; }
+          button.disabled = true;
+          fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "apikey": ANON_KEY, "Authorization": "Bearer " + ANON_KEY, "Prefer": "return=minimal" },
+            body: JSON.stringify(build(new FormData(form)))
+          }).then(function (r) {
+            if (!r.ok) throw new Error("insert failed");
+            form.reset();
+            show("Thanks — we got it. We'll be in touch soon.", true);
+          }).catch(function () {
+            show("Something went wrong sending that. Please email us at info@cc3po.com instead.", false);
+          }).finally(function () { button.disabled = false; });
+        });
+      }
+      wire("podcast-guest-form", function (d) {
+        return { name: d.get("name"), email: d.get("email"), company: d.get("business") || "", service_interest: d.get("topic") || "", message: d.get("story"), source: "podcast-guest", lead_type: "contact", source_detail: "podcast.cc3po.com/insights" };
+      });
+      wire("podcast-contact-form", function (d) {
+        return { name: d.get("name"), email: d.get("email"), message: d.get("message"), source: "podcast-contact", lead_type: "contact", source_detail: "podcast.cc3po.com/insights" };
+      });
+    })();
+  </script>
 
   <!-- Footer -->
   <footer class="footer">

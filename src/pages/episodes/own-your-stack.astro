@@ -1,0 +1,116 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const episodeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  name: 'Own Your Stack',
+  episodeNumber: 1,
+  url: 'https://podcast.cc3po.com/episodes/own-your-stack/',
+  datePublished: '2026-11-23',
+  duration: 'PT6M42S',
+  description: 'One idea in plain words for Central Valley small businesses: own your stack — the tools, accounts, and systems your business runs on should answer to you, not the other way around. Plus a 10-minute homework task and a short Spanish segment.',
+  associatedMedia: {
+    '@type': 'MediaObject',
+    contentUrl: 'https://media.transistor.fm/0bbc4eb8/c841c488.mp3',
+  },
+  partOfSeries: {
+    '@type': 'PodcastSeries',
+    name: 'CC3PO Podcast',
+    url: 'https://podcast.cc3po.com/',
+  },
+};
+---
+
+<Layout
+  title="Ep. 1: Own Your Stack — Transcript | CC3PO Podcast"
+  description="Full transcript of CC3PO Podcast Episode 1, 'Own Your Stack' — own the tools, accounts, and systems your business runs on."
+  image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
+  siteName="CC3PO Podcast"
+  jsonLd={episodeJsonLd}
+>
+  <div class="ep-page">
+    <p class="ep-back"><a href="/">← CC3PO Podcast</a></p>
+    <p class="ep-meta">Episode 1 · Nov 23, 2026 · 6:42</p>
+    <h1>Own Your Stack</h1>
+    <p class="ep-desc">One idea in plain words for Central Valley small businesses: own your stack — the tools, accounts, and systems your business runs on should answer to you, not the other way around. Plus a 10-minute homework task and a short Spanish segment.</p>
+    <audio controls preload="metadata" src="https://media.transistor.fm/0bbc4eb8/c841c488.mp3" class="ep-player">
+      Your browser does not support the audio element.
+    </audio>
+    <p class="ep-links">
+      Listen on <a href="https://podcasts.apple.com/podcast/cc3po-podcast/id6838596218" target="_blank" rel="noopener">Apple Podcasts</a> ·
+      <a href="https://open.spotify.com/show/1Ix82Mlcww5eTH7xXnkVL7" target="_blank" rel="noopener">Spotify</a> ·
+      <a href="https://share.transistor.fm/s/0bbc4eb8" target="_blank" rel="noopener">Transistor</a>
+    </p>
+    <h2>Transcript</h2>
+    <div class="transcript">
+      <p>Okay. We&#x27;re recording. Hey, I&#x27;m Carlos. Around here I go by CC3PO. Welcome to the show.</p>
+      <p>It&#x27;s just me. No co-host, no producer, no panel. Just me and a microphone.</p>
+      <p>This show is for the people running small businesses in the Central Valley. The shops, the offices, the crews. Five people, ten people, maybe fifty. The folks who do the work and also, somehow, fix the printer.</p>
+      <p>I want to talk about technology the way we&#x27;d talk about it over coffee. Plain. No jargon. No hype. And I want to learn more about this community while I&#x27;m at it. Who&#x27;s out there, what you&#x27;re building, what&#x27;s driving you nuts.</p>
+      <p>So that&#x27;s the goal. Not to sell you anything. Just to talk, and hopefully find some of you.</p>
+      <p>Episodes will be short. Seven minutes, give or take. Mostly me talking, sometimes me being wrong. If I&#x27;m wrong, tell me. I can take it.</p>
+      <p>Today is one idea. Own your stack. Stop renting it.</p>
+      <p>Quick translation. Your stack is everything your business runs on. Your email. Your website. Where your files live. Your phone system. The tools your team opens every morning.</p>
+      <p>And no, it&#x27;s not a pancake thing. I get that a lot. Okay, I&#x27;ve never gotten that. I just thought it would be funny.</p>
+      <p>Most of us rent almost all of it. A monthly subscription for this, another one for that. And that&#x27;s fine. Renting is fine. Please do not go build your own email server in the garage.</p>
+      <p>The problem is renting without knowing you&#x27;re renting. That&#x27;s the part that bites you.</p>
+      <p>Here&#x27;s a little test. If one of your tools doubled its price next month, or changed its rules, or just disappeared, do you know what you&#x27;d do?</p>
+      <p>Yeah. Most of us would say a word I can&#x27;t say on the show. Totally normal.</p>
+      <p>So here are three questions. Ten minutes, a coffee, and last month&#x27;s bank statement.</p>
+      <p>One. What are you paying for?</p>
+      <p>Pull up the bank statement and write down every software name you see. Don&#x27;t go from memory. Memory lies.</p>
+      <p>I won&#x27;t throw out a number, because I&#x27;d be making it up. But I&#x27;ll tell you what people usually find. A free trial that turned into a charge. A tool somebody tried once. Two tools doing the same job because two people picked them.</p>
+      <p>The subscription pile. Everybody has one.</p>
+      <p>Two. Who has the keys?</p>
+      <p>Your email login. Your website. Your domain name. Whose name is on the account?</p>
+      <p>And this is a made-up example, so nobody feel called out. Say a friend&#x27;s nephew built the website a few years ago. He set up the domain with his own email. Now he&#x27;s off at college and nobody can reset the password.</p>
+      <p>That&#x27;s not a tech problem. That&#x27;s a keys problem.</p>
+      <p>If the person holding the login isn&#x27;t you, or someone you trust today, you&#x27;re renting a place where you don&#x27;t have the key to the front door.</p>
+      <p>Three. Can you get your stuff back?</p>
+      <p>If everything vanished tomorrow morning, what could you recover, and how fast? Do you have a copy somewhere else? And here&#x27;s the part people skip. Has anyone ever tried to restore it?</p>
+      <p>A backup you&#x27;ve never tested is a hope. That one gets its own episode.</p>
+      <p>Now, some of you are thinking, &quot;Carlos, I&#x27;m busy. I rent this stuff so I don&#x27;t have to think about it.&quot;</p>
+      <p>Fair. I get it. Time is the real cost.</p>
+      <p>So rent the things that are easy to replace. But keep control of the things that would really hurt to lose. Your customer list. Your files. Your domain. Your phone number.</p>
+      <p>You can rent the coffee machine. Just keep the keys to the building.</p>
+      <p>Okay. A little Spanish. I&#x27;m going to do some in every episode, because plenty of our neighbors here run their business in Spanish, and good advice shouldn&#x27;t only work in one language.</p>
+      <p>Tu negocio, tus llaves. Pregúntate: ¿quién tiene la contraseña de mi correo y de mi página web?</p>
+      <p>In English: your business, your keys. Ask yourself, who has the password for my email and my website?</p>
+      <p>Y otra más. Un respaldo que nunca has probado no es un respaldo. Es una esperanza.</p>
+      <p>That one means: a backup you&#x27;ve never tested isn&#x27;t a backup. It&#x27;s a hope.</p>
+      <p>Bien. Spanish done. Nobody got hurt.</p>
+      <p>Here&#x27;s something I keep noticing. Most small businesses around here don&#x27;t have an IT department. They have one person who&#x27;s good with computers, and that person also does three other jobs.</p>
+      <p>That person is tired. If that&#x27;s you, hi. This one&#x27;s for you.</p>
+      <p>The best thing you can do is write it all down once. One page. Tool name, who owns the login, where the data lives, when it renews. One line each.</p>
+      <p>Then when something breaks on a Friday afternoon, you&#x27;re not guessing. You just open the page.</p>
+      <p>That&#x27;s it. That&#x27;s the whole episode. No big sales pitch. If you do just one thing this week, do the bank statement list.</p>
+      <p>And one more thing. If this all sounds like a lot, it&#x27;s not. You don&#x27;t have to fix everything this week. You just have to know what you&#x27;ve got. Knowing is most of the battle. Honestly, it&#x27;s like half of it.</p>
+      <p>And I want to hear what you find. Not the private stuff. Just the funniest forgotten subscription. Send it to me.</p>
+      <p>Better yet, tell me the one thing about your tech that slows your team down. The Wi-Fi that dies at two in the afternoon. The login nobody remembers. The printer. Always the printer. I&#x27;ll read them, and some of them might turn into episodes.</p>
+      <p>Okay, here&#x27;s the part I actually care about.</p>
+      <p>I want to meet more of you. The people building things in this valley. That&#x27;s the point of this whole show.</p>
+      <p>So first, follow me. Everything is linked at cc three p o dot com. I&#x27;m on X at triple-i Cabrales, and on Instagram and YouTube at carlos c b r l s. That&#x27;s where I&#x27;ll post the clips, and where you can tell me what you want me to cover next.</p>
+      <p>Second, get out to a local event. There are a few worth knowing about.</p>
+      <p>The Chamber mixers. Coffee and Connections. And the CC3PO Lab meetup in January. Upcoming dates are always at cc three p o dot com.</p>
+      <p>Go meet your neighbors. That&#x27;s half of what this show is for.</p>
+      <p>Bring a question. Or a coffee order. Either one works.</p>
+      <p>Thanks for listening. I&#x27;m Carlos, aka CC3PO. Go check your login list.</p>
+      <p>Own your stack. Stop renting it.</p>
+    </div>
+    <p class="ep-disclosure">Voiced with an AI clone of Carlos's voice, approved by Carlos.</p>
+  </div>
+</Layout>
+
+<style>
+  .ep-page { max-width: 760px; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+  .ep-back a { color: #60a5fa; }
+  .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: #60a5fa; font-weight: 700; margin-top: 1.5rem; }
+  .ep-page h1 { font-size: 2.4rem; color: #f9fafb; margin-top: .4rem; }
+  .ep-desc { color: #9ca3af; margin-top: .8rem; }
+  .ep-player { width: 100%; margin-top: 1.4rem; }
+  .ep-links { color: #9ca3af; margin-top: 1rem; }
+  .ep-page h2 { color: #f9fafb; margin-top: 2.4rem; font-size: 1.5rem; }
+  .transcript p { color: #d1d5db; margin-top: 1rem; line-height: 1.75; }
+  .ep-disclosure { margin-top: 2rem; color: #93c5fd; font-size: .9rem; border-left: 3px solid #2563eb; padding-left: .7rem; }
+</style>

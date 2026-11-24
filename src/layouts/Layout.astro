@@ -6,16 +6,20 @@ interface Props {
   url?: string;
   type?: string;
   siteName?: string;
+  jsonLd?: object | object[];
 }
 
-const { 
-  title, 
-  description = 'CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.', 
+const {
+  title,
+  description = 'CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.',
   image = 'https://podcast.cc3po.com/cc3po-podcast-og.png',
   url = Astro.url.href,
   type = 'website',
-  siteName = 'CC3PO Insights'
+  siteName = 'CC3PO Insights',
+  jsonLd
 } = Astro.props;
+
+const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
 ---
@@ -48,6 +52,10 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
     <meta name="twitter:site" content="@cc3po3" />
     <meta name="twitter:creator" content="@cc3po3" />
     
+    {jsonLdList.map((ld) => (
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    ))}
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     

@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 
 // Episodes come from the show's Transistor RSS feed at build time,
 // so a new episode appears here on the next deploy after it publishes.
-interface Ep { num: string; title: string; date: string; desc: string; audio: string; link: string; duration: string; }
+interface Ep { num: string; title: string; date: string; iso: string; desc: string; audio: string; link: string; duration: string; secs: number; }
 let episodes: Ep[] = [];
 try {
   const res = await fetch('https://feeds.transistor.fm/cc3po-podcast');
@@ -21,18 +21,20 @@ try {
       num: pick('itunes:episode') || '',
       title: pick('title'),
       date: isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Los_Angeles' }),
+      iso: isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10),
       desc: pick('description').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(),
       audio: enc ? enc[1] : '',
       link: pick('link'),
       duration: secs ? `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}` : '',
+      secs,
     };
   }).filter((e) => e.title);
 } catch (e) { /* fall back below */ }
 if (!episodes.length) {
   episodes = [{
-    num: '1', title: 'Own Your Stack', date: 'Nov 23, 2026',
+    num: '1', title: 'Own Your Stack', date: 'Nov 23, 2026', iso: '2026-11-23',
     desc: 'One idea in plain words for Central Valley small businesses: own your stack — the tools, accounts, and systems your business runs on should answer to you, not the other way around. Plus a 10-minute homework task and a short Spanish segment.',
-    audio: 'https://media.transistor.fm/0bbc4eb8/c841c488.mp3', link: 'https://share.transistor.fm/s/0bbc4eb8', duration: '6:42',
+    audio: 'https://media.transistor.fm/0bbc4eb8/c841c488.mp3', link: 'https://share.transistor.fm/s/0bbc4eb8', duration: '6:42', secs: 402,
   }];
 }
 
@@ -51,6 +53,35 @@ const platforms = [
   { name: 'RSS Feed', href: 'https://feeds.transistor.fm/cc3po-podcast' },
 ];
 
+const seriesJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: 'CC3PO Podcast',
+  url: 'https://podcast.cc3po.com/',
+  description: 'Carlos Cabrales III (CC3PO) — an IT professional and music producer in Lathrop, California — talks plain about the tech small businesses actually run on. One idea per episode, one 10-minute homework task, no selling.',
+  image: 'https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg',
+  webFeed: 'https://feeds.transistor.fm/cc3po-podcast',
+  author: { '@type': 'Person', name: 'Carlos Cabrales III' },
+  publisher: { '@type': 'Organization', name: 'CC3PO', url: 'https://cc3po.com' },
+  sameAs: [
+    'https://podcasts.apple.com/podcast/cc3po-podcast/id6838596218',
+    'https://open.spotify.com/show/1Ix82Mlcww5eTH7xXnkVL7',
+  ],
+};
+
+const episodeJsonLd = episodes.map((ep) => ({
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  name: ep.title,
+  episodeNumber: ep.num ? parseInt(ep.num, 10) : undefined,
+  url: ep.num === '1' ? 'https://podcast.cc3po.com/episodes/own-your-stack/' : 'https://podcast.cc3po.com/',
+  datePublished: ep.iso || undefined,
+  duration: ep.secs ? `PT${Math.floor(ep.secs / 60)}M${ep.secs % 60}S` : undefined,
+  description: ep.desc,
+  associatedMedia: ep.audio ? { '@type': 'MediaObject', contentUrl: ep.audio } : undefined,
+  partOfSeries: { '@type': 'PodcastSeries', name: 'CC3PO Podcast', url: 'https://podcast.cc3po.com/' },
+}));
+
 const upcoming = [
   { num: 2, date: 'Tue, Dec 1, 2026' },
   { num: 3, date: 'Wed, Dec 9, 2026' },
@@ -63,6 +94,7 @@ const upcoming = [
   description="Carlos Cabrales III (CC3PO) — an IT professional and music producer in Lathrop, California — talks plain about the tech small businesses actually run on. One idea per episode, one 10-minute homework task, no selling."
   image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
   siteName="CC3PO Podcast"
+  jsonLd={[seriesJsonLd, ...episodeJsonLd]}
 >
   <nav class="nav">
     <div class="nav-inner">
@@ -114,9 +146,15 @@ const upcoming = [
           <div class="ep-meta">E{ep.num} · {ep.date} · {ep.duration}</div>
           <h3 class="ep-title">{ep.title}</h3>
           <p class="ep-desc">{ep.desc}</p>
+          {ep.audio && (
+            <audio controls preload="none" src={ep.audio} class="ep-player">
+              Your browser does not support the audio element.
+            </audio>
+          )}
           <div class="ep-actions">
             {ep.link && <a href={ep.link} class="btn btn-primary btn-sm" target="_blank" rel="noopener">Play Episode</a>}
             {ep.audio && <a href={ep.audio} class="btn btn-outline btn-sm">Download MP3</a>}
+            {ep.num === '1' && <a href="/episodes/own-your-stack/" class="btn btn-outline btn-sm">Transcript</a>}
           </div>
         </article>
       ))}
@@ -208,6 +246,7 @@ const upcoming = [
   .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: #60a5fa; font-weight: 700; }
   .ep-title { font-size: 1.35rem; color: #f9fafb; margin-top: .35rem; }
   .ep-desc { color: #9ca3af; margin-top: .5rem; }
+  .ep-player { width: 100%; margin-top: 1rem; }
   .ep-actions { display: flex; gap: .7rem; margin-top: 1rem; flex-wrap: wrap; }
 
   .schedule-title { color: #f3f4f6; margin-top: 2rem; font-size: 1.15rem; }

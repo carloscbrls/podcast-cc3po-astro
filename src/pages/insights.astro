@@ -1,0 +1,797 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Soundscape from '../components/Soundscape.astro';
+
+const episodes = [
+  { num: 1, title: "Why Your HVAC Website Is Losing 40% of Visitors", date: "May 14", desc: "Most HVAC sites drive away nearly half their traffic before a single call is made. We break down exactly why — and the fixes that take minutes.", duration: "37 min", audio: "/episodes/episode-001.mp3", live: true },
+  { num: 2, title: "The $4,000 Lawsuit You Don't Know About (ADA Compliance)", date: "May 15", desc: "ADA web lawsuits hit small businesses every day. We explain the legal landscape and the compliance steps that protect you.", duration: "22 min", audio: "/episodes/episode-002.mp3", live: true },
+  { num: 3, title: "Dental Websites: Beautiful But Dangerous", date: "May 15", desc: "Pretty doesn't mean safe. Dental sites often hide critical security and compliance gaps behind sleek design.", duration: "46 min", audio: "/episodes/episode-003.mp3", live: true },
+  { num: 4, title: "3 Security Headers Every Small Business Needs", date: "May 15", desc: "Three lines of code can prevent data breaches, clickjacking, and XSS attacks. We show you exactly what to add.", duration: "59 min", audio: "/episodes/episode-004.mp3", live: true },
+  { num: 5, title: "Your Gym Website Takes 6 Seconds to Load", date: "May 15", desc: "Fitness websites are among the slowest we audit. Here's what's dragging them down and how to fix it fast.", duration: "53 min", audio: "/episodes/episode-005.mp3", live: true },
+  { num: 6, title: "Why 89% of Small Businesses Are Using AI (And What the Other 11% Are Missing)", date: "May 16", desc: "A new report reveals 89% of small businesses have adopted AI. Sage breaks down what's actually happening and where to start if you're behind.", duration: "8 min", audio: "/episodes/episode-006.mp3", live: true },
+  { num: 7, title: "ADA Lawsuits Are Hitting Small Businesses Right Now — Here's How to Protect Yourself", date: "May 16", desc: "8,667 federal ADA cases in 2025. CIPA tracking lawsuits targeting California businesses at $5K per violation. Sentinel breaks down what's really happening and exactly what to do.", duration: "13 min", audio: "/episodes/episode-007.mp3", live: true, guest: "Sentinel 🛡️" },
+  { num: 8, title: "Stop Doing Everything Manually — Automation That Actually Works", date: "May 16", desc: "From 47-hour response times to under 2 minutes. Sage talks with Forge about building automation that works — JotForm, n8n, Supabase, and AI lead scoring. The exact system, for under $75/month.", duration: "12 min", audio: "/episodes/episode-008.mp3", live: true, guest: "Forge ⚒️" },
+  { num: 9, title: "What's Coming Next for Small Business Tech — Deep Research Findings", date: "May 16", desc: "Apollo reveals the 5 trends that will reshape small business tech by 2027. From AI agents replacing SaaS to voice-first interfaces, this is what the data says is coming next.", duration: "18 min", audio: "/episodes/episode-009.mp3", live: true, guest: "Apollo 🔍" },
+  { num: 10, title: "How Content Actually Ranks — Not What the Gurus Tell You", date: "May 16", desc: "Weaver breaks down content strategy myths and reveals what really drives traffic and rankings. Topic clusters, technical foundations, and the thread metaphor that changes everything.", duration: "11 min", audio: "/episodes/episode-010.mp3", live: true, guest: "Weaver 🕸️" },
+  { num: 11, title: "Local SEO + Compliance: The Double Win", date: "May 16", desc: "Scout reveals why WCAG-compliant businesses rank up to 30% higher in local search. Alt text, page speed, schema markup, mobile responsiveness, and trust signals — the five overlaps that make SEO and compliance one project with two payoffs.", duration: "14 min", audio: "/episodes/episode-011.mp3", live: true, guest: "Scout 🕵️" },
+  { num: 12, title: "Season 1 Finale: The Village Weighs In — Top Digital Fixes for 2026", date: "May 16", desc: "The Season 1 finale brings the whole village together. Sentinel, Forge, Apollo, Weaver, and Scout each deliver their #1 insight from the season. Sage hosts and ties it all together — compliance, automation, content, research, and local visibility are all connected. Fix one, you fix a little. Fix all of them, you build a system that compounds.", duration: "4 min", audio: "/episodes/episode-012.mp3", live: true, guest: "The Village 🌍" },
+];
+
+const agents = [
+  { name: "Atlas 🌍", role: "Systems Coordinator", img: "/images/agents/atlas.webp" },
+  { name: "Sentinel 🛡️", role: "Compliance Expert", img: "/images/agents/sentinel.webp" },
+  { name: "Forge ⚒️", role: "Security & Performance", img: "/images/agents/forge.webp" },
+  { name: "Alexandria 📚", role: "Research & Intelligence", img: "/images/agents/alexandria.webp" },
+  { name: "Weaver 🕸️", role: "Content & Narrative", img: "/images/agents/weaver.webp" },
+  { name: "Sage 🌿", role: "Learning & Innovation", img: "/images/agents/sage.webp" },
+  { name: "Apollo 🔍", role: "Deep Research", img: "/images/agents/apollo.webp" },
+  { name: "Scout 🕵️", role: "Lead Generation & Local SEO", img: "/images/agents/scout.webp" },
+];
+---
+
+<Layout title="CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.">
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/insights" class="nav-logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
+        <span>CC3PO <strong>Insights</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">CC3PO Podcast</a>
+        <a href="#episodes">Episodes</a>
+        <a href="#village">The Village</a>
+        <a href="#connect">Get Involved</a>
+        <a href="#subscribe">Subscribe</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🎙️ Weekly Podcast</div>
+      <h1 class="hero-title">CC3PO <span class="accent">Insights</span></h1>
+      <p class="hero-tagline">Real Businesses. Real Data. Real Fixes.</p>
+      <p class="hero-sub">A village of AI specialists breaks down what's really happening on your website.</p>
+      <div class="hero-actions">
+        <a href="#episodes" class="btn btn-primary">Listen Now</a>
+        <a href="#subscribe" class="btn btn-outline">Subscribe Free</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Subscribe -->
+  <section id="subscribe" class="subscribe">
+    <h2 class="section-title">Subscribe Everywhere</h2>
+    <p class="section-desc">Never miss an episode. Available on every major platform.</p>
+    <div class="subscribe-grid">
+      <a href="https://podcasts.apple.com/us/podcast/cc3po-insights/id1896678753" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.17-.69.82-1.83 1.46-2.94 1.38-.15-1.15.51-2.35 1.04-3.05"/></svg>
+        <span>Apple Podcasts</span>
+      </a>
+      <a href="https://open.spotify.com/show/033gZyn9HnFLsOH8aCwjNp" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.04 5.16 9.18c-.6.18-1.2-.18-1.38-.72-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.36z"/></svg>
+        <span>Spotify</span>
+      </a>
+      <a href="https://podcastindex.org/podcast/8688499" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm-1.2 17.6c-3.6 0-6.4-1.6-6.4-3.6s2.8-3.6 6.4-3.6 6.4 1.6 6.4 3.6-2.8 3.6-6.4 3.6zm7.2-5.2c-.4.2-1-.2-1.4-.8-.4-.8-.4-1.6 0-2 .4-.2 1 .2 1.4.8.4.8.4 1.6 0 2z"/></svg>
+        <span>Podcast Index</span>
+      </a>
+      <a href="https://podcast-cc3po.netlify.app/episodes/cc3po-insights-intro.mp3" class="subscribe-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/><path d="M12 2v4m0 12v4"/><path d="m4.93 4.93 2.83 2.83m8.48 8.48 2.83 2.83"/><path d="m4.93 19.07 2.83-2.83m8.48-8.48 2.83-2.83"/></svg>
+        <span>RSS Feed</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Episodes -->
+  <section id="episodes" class="episodes">
+    <h2 class="section-title">Season 1</h2>
+    <p class="section-desc">12 episodes. One mission — make the web work for real businesses.</p>
+    <div class="episode-list">
+      {episodes.map((ep) => (
+        <article id={`ep${ep.num}`} class="episode-card" class:list={["episode-card", { live: ep.live }]}>
+          <div class="ep-number">E{ep.num.toString().padStart(2, '0')}</div>
+          <div class="ep-body">
+            <div class="ep-meta">
+              <span class="ep-date">{ep.date}</span>
+              <span class="ep-duration">{ep.duration}</span>
+              {ep.guest && <span class="ep-guest">{ep.guest}</span>}
+              {ep.live && <span class="ep-badge">LIVE</span>}
+            </div>
+            <h3 class="ep-title">{ep.title}</h3>
+            <p class="ep-desc">{ep.desc}</p>
+            {ep.live && ep.audio && (
+              <audio controls class="ep-player" preload="metadata">
+                <source src={ep.audio} type="audio/mpeg" />
+              </audio>
+            )}
+            {ep.live && (
+              <div class="ep-listen">
+                <a href={`https://open.spotify.com/show/033gZyn9HnFLsOH8aCwjNp`} class="listen-btn spotify" target="_blank" rel="noopener">
+                  🎧 Spotify
+                </a>
+                <a href={`https://podcasts.apple.com/us/podcast/cc3po-insights/id1896678753`} class="listen-btn apple" target="_blank" rel="noopener">
+                  🍎 Apple Podcasts
+                </a>
+                <a href={`/insights#ep${ep.num}`} class="listen-btn share" target="_blank" rel="noopener" title="Copy link to this episode">
+                  🔗 Share
+                </a>
+              </div>
+            )}
+          </div>
+          {!ep.live && (
+            <button class="play-btn" disabled aria-label={`Episode ${ep.num} coming soon`}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#555"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Behind the AI Soundscape -->
+  <Soundscape />
+
+  <!-- Meet the Village -->
+  <section id="village" class="village">
+    <h2 class="section-title">Meet the Village</h2>
+    <p class="section-desc">Every insight comes from a specialist. No generalists here.</p>
+    <div class="village-grid">
+      {agents.map((a) => (
+        <div class="village-card">
+          <img src={a.img} alt={`${a.name} portrait`} class="village-avatar-img" loading="lazy" />
+          <div class="village-name">{a.name}</div>
+          <div class="village-role">{a.role}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Connect -->
+  <section id="connect" class="connect">
+    <h2 class="section-title">Want In?</h2>
+    <p class="section-desc">Whether you need a free website scan, want to be a guest on the show, or just have a question — we're here.</p>
+    <div class="connect-grid">
+      <div class="connect-card">
+        <div class="connect-icon">🔍</div>
+        <h3 class="connect-heading">Free Website Scan</h3>
+        <p class="connect-text">Compliance, performance, security — get your full report in under 60 seconds.</p>
+        <a href="https://audit.cc3po.com" class="btn btn-primary btn-sm">Scan My Site</a>
+      </div>
+      <div class="connect-card">
+        <div class="connect-icon">🎙️</div>
+        <h3 class="connect-heading">Be a Guest</h3>
+        <p class="connect-text">Have a story about small business tech, compliance, or automation? We'd love to have you on.</p>
+        <a href="#guest-form" class="btn btn-outline btn-sm">Apply to Be a Guest</a>
+      </div>
+      <div class="connect-card">
+        <div class="connect-icon">💬</div>
+        <h3 class="connect-heading">Ask Us Anything</h3>
+        <p class="connect-text">Questions about your website, compliance, or what we cover on the show? Drop us a line.</p>
+        <a href="#contact-form" class="btn btn-outline btn-sm">Send a Message</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guest Form -->
+  <section id="guest-form" class="form-section">
+    <h2 class="section-title">Apply to Be a Guest</h2>
+    <p class="section-desc">We're always looking for small business owners, compliance experts, and tech builders who have real stories to share.</p>
+    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="guest-name">Your Name *</label>
+          <input type="text" id="guest-name" name="name" required placeholder="Jane Doe" />
+        </div>
+        <div class="form-group">
+          <label for="guest-email">Email *</label>
+          <input type="email" id="guest-email" name="email" required placeholder="jane@company.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="guest-business">Business / Organization</label>
+          <input type="text" id="guest-business" name="business" placeholder="Company or business name" />
+        </div>
+        <div class="form-group">
+          <label for="guest-topic">What would you talk about?</label>
+          <select id="guest-topic" name="topic">
+            <option value="">Choose a topic...</option>
+            <option value="compliance">ADA / Web Compliance</option>
+            <option value="automation">Automation & AI</option>
+            <option value="seo">SEO & Local Search</option>
+            <option value="security">Website Security</option>
+            <option value="content">Content Strategy</option>
+            <option value="small-biz">Small Business Tech</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label for="guest-story">Tell us your story *</label>
+        <textarea id="guest-story" name="story" rows="4" required placeholder="What experience or insight would you share on the show?"></textarea>
+      </div>
+      <input type="hidden" name="source" value="podcast-guest" />
+      <input type="hidden" name="page" value="podcast.cc3po.com" />
+      <button type="submit" class="btn btn-primary btn-full">Submit Guest Application</button>
+    </form>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact-form" class="form-section">
+    <h2 class="section-title">Get in Touch</h2>
+    <p class="section-desc">Have a question about the show, a topic suggestion, or just want to say hi?</p>
+    <form class="podcast-form" action="https://formspree.io/f/xpzvqrjl" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="contact-name">Name *</label>
+          <input type="text" id="contact-name" name="name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email *</label>
+          <input type="email" id="contact-email" name="email" required placeholder="you@email.com" />
+        </div>
+      </div>
+      <div class="form-group full">
+        <label for="contact-message">Message *</label>
+        <textarea id="contact-message" name="message" rows="4" required placeholder="What's on your mind?"></textarea>
+      </div>
+      <input type="hidden" name="source" value="podcast-contact" />
+      <input type="hidden" name="page" value="podcast.cc3po.com" />
+      <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
+        <span>CC3PO Insights</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="https://insights.cc3po.com">Blog</a>
+        <a href="https://audit.cc3po.com">Audit</a>
+      </div>
+      <div class="footer-copy">&copy; 2026 CC3PO. All rights reserved.</div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  /* Nav */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10,10,10,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: #e5e7eb;
+    font-size: 1rem;
+  }
+  .nav-logo strong { color: #60a5fa; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { color: #d4d4d8; font-size: .875rem; }
+  .nav-links a:hover { color: #fff; }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/village-hero.webp');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,.55) 40%, rgba(10,10,10,.85) 100%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    padding: 5rem 1.5rem 4rem;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: .35rem 1rem;
+    border-radius: 999px;
+    background: rgba(59,130,246,.12);
+    color: #60a5fa;
+    font-size: .8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.03em;
+    line-height: 1.1;
+  }
+  .accent { color: #60a5fa; }
+  .hero-tagline {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 600;
+    color: #f3f4f6;
+    margin-top: 1rem;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: #d4d4d8;
+    max-width: 520px;
+    margin: .75rem auto 0;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1.75rem;
+    border-radius: .5rem;
+    font-size: .9rem;
+    font-weight: 600;
+    transition: all .2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary {
+    background: #2563eb;
+    color: #fff;
+  }
+  .btn-primary:hover { background: #2563eb; color: #fff; }
+  .btn-outline {
+    background: transparent;
+    color: #60a5fa;
+    border: 1.5px solid #3b82f6;
+  }
+  .btn-outline:hover { background: rgba(59,130,246,.1); color: #60a5fa; }
+
+  /* Section common */
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+  }
+  .section-desc {
+    color: #d4d4d8;
+    text-align: center;
+    margin-top: .5rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Subscribe */
+  .subscribe {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .subscribe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .subscribe-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    padding: 1.5rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    color: #e5e7eb;
+    font-weight: 500;
+    transition: all .2s;
+  }
+  .subscribe-card:hover {
+    border-color: #60a5fa;
+    background: rgba(59,130,246,.06);
+    color: #fff;
+  }
+
+  /* Episodes */
+  .episodes {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .episode-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-top: 2rem;
+  }
+  .episode-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    transition: all .2s;
+  }
+  .episode-card:hover {
+    border-color: #60a5fa;
+    background: rgba(59,130,246,.04);
+  }
+  .ep-number {
+    font-size: .8rem;
+    font-weight: 700;
+    color: #60a5fa;
+    background: rgba(59,130,246,.12);
+    padding: .4rem .65rem;
+    border-radius: .4rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ep-body { flex: 1; min-width: 0; }
+  .ep-meta {
+    display: flex;
+    gap: .75rem;
+    font-size: .75rem;
+    color: #9ca3af;
+    margin-bottom: .25rem;
+  }
+  .ep-duration {
+    padding: .1rem .5rem;
+    background: rgba(255,255,255,.06);
+    border-radius: .25rem;
+  }
+  .ep-title {
+    font-size: .95rem;
+    font-weight: 600;
+    color: #f3f4f6;
+    line-height: 1.3;
+  }
+  .ep-desc {
+    font-size: .8rem;
+    color: #9ca3af;
+    margin-top: .25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ep-badge {
+    display: inline-block;
+    background: #22c55e;
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+  }
+  .ep-guest {
+    display: inline-block;
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+  .ep-listen {
+    display: flex;
+    gap: .5rem;
+    margin-top: .5rem;
+    flex-wrap: wrap;
+  }
+  .listen-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .35rem .75rem;
+    border-radius: .375rem;
+    font-size: .75rem;
+    font-weight: 600;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .listen-btn:hover {
+    border-color: #60a5fa;
+    background: rgba(59,130,246,.08);
+    color: #fff;
+  }
+  .listen-btn.spotify:hover { border-color: #1db954; background: rgba(29,185,84,.08); color: #1db954; }
+  .listen-btn.apple:hover { border-color: #fc3c44; background: rgba(252,60,68,.08); color: #fc3c44; }
+  .listen-btn.share:hover { border-color: #60a5fa; }
+  .play-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Connect section */
+  .connect {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .connect-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .connect-card {
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: all .2s;
+  }
+  .connect-card:hover {
+    border-color: #60a5fa;
+    background: rgba(59,130,246,.04);
+  }
+  .connect-icon {
+    font-size: 2rem;
+    margin-bottom: .75rem;
+  }
+  .connect-heading {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin-bottom: .5rem;
+  }
+  .connect-text {
+    font-size: .85rem;
+    color: #d4d4d8;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .btn-sm {
+    padding: .5rem 1.25rem;
+    font-size: .8rem;
+  }
+  .btn-full {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Form section */
+  .form-section {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .podcast-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+  }
+  .form-group.full {
+    grid-column: 1 / -1;
+  }
+  .form-group label {
+    font-size: .8rem;
+    font-weight: 600;
+    color: #d1d5db;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: #111;
+    border: 1px solid #333;
+    border-radius: .5rem;
+    padding: .65rem .85rem;
+    color: #f3f4f6;
+    font-size: .9rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color .2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 2px rgba(59,130,246,.15);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #9ca3af;
+  }
+
+  @media (max-width: 640px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+  .ep-player {
+    width: 100%;
+    margin-top: 12px;
+    height: 40px;
+    border-radius: 8px;
+  }
+  .episode-card.live {
+    border-color: rgba(34,197,94,0.3);
+  }
+  .play-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #2563eb;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .play-btn:hover { background: #2563eb; }
+  .play-btn svg { margin-left: 2px; }
+
+  /* Village */
+  .village {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .village-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .village-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background: #111;
+    border: 1px solid #1e1e1e;
+    border-radius: .75rem;
+    transition: all .2s;
+  }
+  .village-card:hover {
+    border-color: #60a5fa;
+    background: rgba(59,130,246,.04);
+    transform: translateY(-2px);
+  }
+  .village-avatar-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: .75rem;
+    border: 2px solid #333;
+    transition: border-color .2s;
+  }
+  .village-card:hover .village-avatar-img {
+    border-color: #60a5fa;
+  }
+  .village-name {
+    font-weight: 700;
+    color: #f3f4f6;
+    font-size: .95rem;
+  }
+  .village-role {
+    font-size: .8rem;
+    color: #9ca3af;
+    margin-top: .2rem;
+  }
+
+  /* CTA */
+  .cta {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .cta-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .cta-desc {
+    color: #d4d4d8;
+    margin-top: .75rem;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid #1e1e1e;
+    padding: 2rem 1.5rem;
+  }
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    color: #d4d4d8;
+    font-size: .85rem;
+    font-weight: 600;
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .footer-links a { color: #9ca3af; font-size: .85rem; }
+  .footer-links a:hover { color: #e5e7eb; }
+  .footer-copy { color: #9ca3af; font-size: .8rem; }
+
+  @media (max-width: 640px) {
+    .episode-card { flex-wrap: wrap; }
+    .play-btn { align-self: flex-end; }
+    .nav-links { gap: 1rem; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>

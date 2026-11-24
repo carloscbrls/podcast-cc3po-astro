@@ -5,6 +5,7 @@ interface Props {
   image?: string;
   url?: string;
   type?: string;
+  siteName?: string;
 }
 
 const { 
@@ -12,7 +13,8 @@ const {
   description = 'CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.', 
   image = 'https://podcast.cc3po.com/cc3po-podcast-og.png',
   url = Astro.url.href,
-  type = 'website'
+  type = 'website',
+  siteName = 'CC3PO Insights'
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
@@ -35,7 +37,7 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
     <meta property="og:url" content={canonicalURL.href} />
-    <meta property="og:site_name" content="CC3PO Insights" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="en_US" />
     
     <!-- Twitter Card -->

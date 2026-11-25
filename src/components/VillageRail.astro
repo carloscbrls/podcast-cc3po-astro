@@ -1,0 +1,119 @@
+---
+const doors = [
+  {
+    label: 'Get help',
+    descriptor: "Don't Lose Your Way",
+    href: 'https://dontloseyourway.cc3po.com/start-here/?utm_source=podcast.cc3po.com&utm_medium=village-rail&utm_campaign=dlyw-story',
+  },
+  {
+    label: 'Listen',
+    descriptor: 'More Than Myself — out Dec 3',
+    href: 'https://music.cc3po.com/release/more-than-myself-a-christmas-journey?utm_source=podcast.cc3po.com&utm_medium=village-rail&utm_campaign=estate-listen',
+  },
+  {
+    label: 'Read',
+    descriptor: 'CC3PO Insights',
+    href: 'https://insights.cc3po.com/?utm_source=podcast.cc3po.com&utm_medium=village-rail&utm_campaign=estate-read',
+  },
+  {
+    label: 'Learn',
+    descriptor: 'Academy — the free AI Lab',
+    href: 'https://academy.cc3po.com/?utm_source=podcast.cc3po.com&utm_medium=village-rail&utm_campaign=estate-learn',
+  },
+  {
+    label: 'Run the free scan',
+    descriptor: 'Website compliance check',
+    href: 'https://cc3po.com/audit?utm_source=podcast.cc3po.com&utm_medium=village-rail&utm_campaign=estate-scan',
+  },
+  {
+    label: 'Call',
+    descriptor: '209-701-1137',
+    href: 'tel:+12097011137',
+  },
+];
+---
+
+<nav class="village-rail" aria-label="Village rail">
+  <div class="village-rail-inner">
+    <p class="village-rail-heading">The Village</p>
+    <ul class="village-rail-doors">
+      {doors.map((door) => (
+        <li class="village-rail-item">
+          <a class="village-rail-link" href={door.href}>
+            <span class="village-rail-label">{door.label}</span>
+            <span class="village-rail-descriptor">{door.descriptor}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .village-rail {
+    background: var(--brand-surface-dark);
+    border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent);
+    color: var(--brand-paper);
+  }
+  .village-rail-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) 1.25rem var(--spacing-xl);
+  }
+  .village-rail-heading {
+    color: var(--semantic-danger-tint);
+    font-size: var(--type-caption);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-md);
+  }
+  .village-rail-doors {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+  .village-rail-item {
+    flex: 1 1 160px;
+    min-width: 0;
+  }
+  .village-rail-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    height: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid color-mix(in srgb, var(--brand-paper) 14%, transparent);
+    border-radius: var(--radius-sm);
+    color: var(--brand-paper);
+    text-decoration: none;
+  }
+  .village-rail-link:hover {
+    border-color: var(--semantic-danger-tint);
+    color: var(--brand-paper);
+  }
+  .village-rail-link:focus-visible {
+    outline: 3px solid var(--semantic-focus);
+    outline-offset: 2px;
+  }
+  .village-rail-label {
+    font-weight: 700;
+    font-size: var(--type-body);
+    line-height: 1.3;
+    overflow-wrap: break-word;
+  }
+  .village-rail-descriptor {
+    color: var(--semantic-muted);
+    font-size: var(--type-caption);
+    line-height: 1.4;
+    overflow-wrap: break-word;
+  }
+  @media (max-width: 640px) {
+    .village-rail-item {
+      flex-basis: 100%;
+    }
+  }
+</style>

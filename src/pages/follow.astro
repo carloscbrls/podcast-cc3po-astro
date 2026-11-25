@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import CaptureForm from '../components/CaptureForm.astro';
+import { PLATFORMS } from '../lib/episodes.ts';
+---
+
+<Layout
+  title="Follow the CC3PO Podcast"
+  description="One door to follow the CC3PO Podcast in your podcast app: Apple Podcasts, Spotify, Amazon Music, Pocket Casts, and more — plus the RSS feed."
+  image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
+  siteName="CC3PO Podcast"
+>
+  <SiteNav current="follow" />
+  <div class="wrap">
+    <div class="head">
+      <img src="/images/cc3po-podcast-cover.jpg" alt="CC3PO Podcast cover art" width="120" height="120" />
+      <div>
+        <h1>Follow the show</h1>
+        <p class="lede">Pick your podcast app — one tap and new episodes land there automatically. This page is the one door: <strong>podcast.cc3po.com/follow</strong></p>
+      </div>
+    </div>
+
+    <ul class="platform-list">
+      {PLATFORMS.map((p) => (
+        <li><a href={p.href} target="_blank" rel="noopener" class="platform-row"><span>{p.name}</span><span class="arrow" aria-hidden="true">→</span></a></li>
+      ))}
+    </ul>
+
+    <section class="capture-wrap">
+      <CaptureForm source="follow-page" heading="Or get new episodes by email" blurb="If podcasts apps are not your thing, one email per episode works too." />
+    </section>
+
+    <p class="voice-line">Want to be part of the show? <a href="/voice/">Leave a voice message</a> — listener questions become episodes.</p>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 CC3PO LLC · Lathrop, California</p>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="/episodes/">Episodes</a>
+        <a href="/insights">CC3PO Insights</a>
+        <a href="https://feeds.transistor.fm/cc3po-podcast">RSS</a>
+      </div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .wrap { max-width: 720px; margin: 0 auto; padding: 2.4rem 1.25rem 0; }
+  .head { display: flex; gap: 1.4rem; align-items: center; flex-wrap: wrap; }
+  .head img { border-radius: var(--radius-md); width: 120px; height: 120px; }
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--brand-paper); }
+  .lede { color: var(--semantic-muted); margin-top: .4rem; max-width: 30rem; }
+  .lede strong { color: var(--brand-gold); }
+  .platform-list { list-style: none; margin-top: 1.8rem; display: grid; gap: .6rem; }
+  .platform-row { display: flex; justify-content: space-between; align-items: center; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: var(--radius-sm); padding: 1rem 1.1rem; color: var(--brand-paper); font-weight: 700; font-size: 1.02rem; min-height: 44px; }
+  .platform-row:hover { border-color: var(--semantic-info); color: var(--brand-paper); }
+  .platform-row .arrow { color: var(--semantic-info); }
+  .capture-wrap { margin-top: 2.2rem; }
+  .voice-line { color: var(--semantic-muted); margin-top: 1.8rem; }
+  .voice-line a { text-decoration: underline; }
+  .footer { margin-top: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--brand-silver); font-size: .9rem; }
+  .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--semantic-muted); padding: .55rem 0; }
+</style>

@@ -1,0 +1,36 @@
+---
+interface Props { current?: string; }
+const { current = '' } = Astro.props;
+const links = [
+  { href: '/episodes/', label: 'Episodes', key: 'episodes' },
+  { href: '/follow/', label: 'Follow', key: 'follow' },
+  { href: '/voice/', label: 'Leave a Message', key: 'voice' },
+  { href: '/#about', label: 'About', key: 'about' },
+  { href: '/insights', label: 'CC3PO Insights', key: 'insights' },
+];
+---
+<nav class="nav" aria-label="Main">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
+      <span>CC3PO <strong>Podcast</strong></span>
+    </a>
+    <div class="nav-links">
+      {links.map((l) => (
+        <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--brand-night) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: .9rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .nav-logo { display: flex; align-items: center; gap: .55rem; color: var(--brand-paper); font-weight: 600; font-size: 1.05rem; padding: .45rem 0; }
+  .nav-logo svg { color: var(--semantic-info); }
+  .nav-logo strong { color: var(--semantic-info); }
+  .nav-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+  .nav-links a { color: var(--semantic-muted); font-size: .95rem; padding: .62rem 0; }
+  .nav-links a:hover { color: var(--semantic-info); }
+  .nav-links a[aria-current="page"] { color: var(--brand-paper); font-weight: 700; }
+</style>

@@ -1,0 +1,144 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import PersistentPlayer from '../../components/PersistentPlayer.astro';
+import { fetchEpisodes } from '../../lib/episodes.ts';
+
+const episodes = await fetchEpisodes();
+---
+
+<Layout
+  title="Episodes — CC3PO Podcast"
+  description="Every episode of the CC3PO Podcast: one idea per episode for Central Valley small businesses, with show notes and full transcripts."
+  image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
+  siteName="CC3PO Podcast"
+>
+  <SiteNav current="episodes" />
+  <div class="wrap">
+    <h1>Episodes</h1>
+    <p class="lede">One idea per episode, one 10-minute homework task, no selling. Search the show notes and transcripts:</p>
+
+    <form class="search" role="search" id="ep-search-form">
+      <label for="ep-q">Search episodes</label>
+      <div class="search-row">
+        <input id="ep-q" name="q" type="search" placeholder="Try “backup”, “login”, “stack”…" autocomplete="off" />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+      <p class="search-status" role="status"></p>
+    </form>
+
+    <div class="episode-list" id="episode-list">
+      {episodes.map((ep) => (
+        <article class="episode-card" data-slug={ep.slug}>
+          <p class="ep-meta">E{ep.num} · {ep.date} · {ep.duration}</p>
+          <h2 class="ep-title"><a href={`/episodes/${ep.slug}/`}>{ep.title}</a></h2>
+          <p class="ep-desc">{ep.descText}</p>
+          <div class="ep-actions">
+            <button type="button" class="btn btn-primary btn-sm" data-play={ep.audio} data-play-title={`E${ep.num}: ${ep.title}`} data-play-href={`/episodes/${ep.slug}/`}>▶ Play</button>
+            <a href={`/episodes/${ep.slug}/`} class="btn btn-outline btn-sm">Notes & transcript</a>
+          </div>
+          <p class="ep-match" hidden></p>
+        </article>
+      ))}
+    </div>
+    <p class="no-results" hidden>No episodes match that yet. Try a shorter word — or <a href="/voice/">ask Carlos to cover it</a>.</p>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 CC3PO LLC · Lathrop, California</p>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="/follow/">Follow the show</a>
+        <a href="/insights">CC3PO Insights</a>
+        <a href="https://feeds.transistor.fm/cc3po-podcast">RSS</a>
+      </div>
+    </div>
+  </footer>
+  <PersistentPlayer />
+
+  <script>
+    const form = document.getElementById('ep-search-form') as HTMLFormElement | null;
+    const input = document.getElementById('ep-q') as HTMLInputElement | null;
+    const status = document.querySelector('.search-status') as HTMLElement | null;
+    const cards = [...document.querySelectorAll('.episode-card')] as HTMLElement[];
+    const noResults = document.querySelector('.no-results') as HTMLElement | null;
+    let index: Record<string, string> | null = null;
+
+    async function loadIndex() {
+      if (index) return index;
+      try {
+        const res = await fetch('/search-index.json');
+        const data = await res.json();
+        index = {};
+        for (const e of data.episodes) index[e.slug] = `${e.title} ${e.text}`.toLowerCase();
+      } catch { index = {}; }
+      return index;
+    }
+    function snippet(text: string, q: string) {
+      const i = text.toLowerCase().indexOf(q);
+      if (i < 0) return '';
+      const start = Math.max(0, i - 60);
+      return `…${text.slice(start, i + q.length + 80).replace(/\s+/g, ' ').trim()}…`;
+    }
+    async function run(qRaw: string) {
+      const q = qRaw.trim().toLowerCase();
+      if (!q) {
+        cards.forEach((c) => { c.hidden = false; const m = c.querySelector('.ep-match') as HTMLElement; m.hidden = true; });
+        if (noResults) noResults.hidden = true;
+        if (status) status.textContent = '';
+        return;
+      }
+      const idx = await loadIndex();
+      let shown = 0;
+      cards.forEach((c) => {
+        const slug = c.dataset.slug || '';
+        const hay = idx[slug] || '';
+        const hit = hay.includes(q);
+        c.hidden = !hit;
+        const m = c.querySelector('.ep-match') as HTMLElement;
+        if (hit) { shown++; const s = snippet(hay, q); if (s) { m.textContent = s; m.hidden = false; } else m.hidden = true; }
+        else m.hidden = true;
+      });
+      if (noResults) noResults.hidden = shown > 0;
+      if (status) status.textContent = shown ? `${shown} episode${shown === 1 ? '' : 's'} match “${qRaw.trim()}”.` : '';
+    }
+    form?.addEventListener('submit', (e) => { e.preventDefault(); run(input?.value || ''); });
+    input?.addEventListener('input', () => run(input.value));
+    const initial = new URLSearchParams(location.search).get('q');
+    if (initial && input) { input.value = initial; run(initial); }
+  </script>
+</Layout>
+
+<style>
+  .wrap { max-width: 880px; margin: 0 auto; padding: 2.4rem 1.25rem 0; }
+  h1 { font-size: 2.4rem; font-weight: 800; color: var(--brand-paper); }
+  .lede { color: var(--semantic-muted); margin-top: .5rem; max-width: 40rem; }
+  .search { margin-top: 1.6rem; }
+  .search label { display: block; font-weight: 600; color: var(--brand-paper); margin-bottom: .45rem; }
+  .search-row { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .search-row input { flex: 1 1 240px; font-size: 16px; padding: .7rem .9rem; border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent); background: var(--brand-surface-dark); color: var(--brand-paper); min-height: 44px; }
+  .search-row input:focus { outline: 2px solid var(--semantic-focus); outline-offset: 1px; }
+  .search-status { color: var(--brand-silver); margin-top: .6rem; font-size: .92rem; }
+  .btn { display: inline-block; border-radius: var(--radius-sm); padding: .7rem 1.3rem; font-weight: 700; font-size: .95rem; border: 0; cursor: pointer; min-height: 44px; }
+  .btn-primary { background: var(--brand-navy); color: var(--brand-paper); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); }
+  .btn-outline { border: 1px solid color-mix(in srgb, var(--brand-paper) 25%, transparent); color: var(--brand-paper); }
+  .btn-sm { padding: .5rem 1rem; font-size: .88rem; }
+  .episode-list { display: grid; gap: 1rem; margin-top: 1.6rem; }
+  .episode-card { background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: var(--radius-md); padding: 1.4rem; }
+  .episode-card[hidden] { display: none; }
+  .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--semantic-info); font-weight: 700; }
+  .ep-title { font-size: 1.35rem; margin-top: .35rem; }
+  .ep-title a { color: var(--brand-paper); }
+  .ep-title a:hover { color: var(--semantic-info); }
+  .ep-desc { color: var(--semantic-muted); margin-top: .5rem; }
+  .ep-actions { display: flex; gap: .7rem; margin-top: 1rem; flex-wrap: wrap; }
+  .ep-match { color: var(--brand-gold); margin-top: .8rem; font-size: .92rem; }
+  .no-results { color: var(--semantic-muted); margin-top: 1.4rem; }
+  .no-results a { text-decoration: underline; }
+  .footer { margin-top: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--brand-silver); font-size: .9rem; }
+  .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--semantic-muted); padding: .55rem 0; }
+</style>

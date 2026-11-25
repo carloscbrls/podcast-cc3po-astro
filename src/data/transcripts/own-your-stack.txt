@@ -1,0 +1,105 @@
+Okay. We're recording. Hey, I'm Carlos. Around here I go by CC3PO. Welcome to the show.
+
+It's just me. No co-host, no producer, no panel. Just me and a microphone.
+
+This show is for the people running small businesses in the Central Valley. The shops, the offices, the crews. Five people, ten people, maybe fifty. The folks who do the work and also, somehow, fix the printer.
+
+I want to talk about technology the way we'd talk about it over coffee. Plain. No jargon. No hype. And I want to learn more about this community while I'm at it. Who's out there, what you're building, what's driving you nuts.
+
+So that's the goal. Not to sell you anything. Just to talk, and hopefully find some of you.
+
+Episodes will be short. Seven minutes, give or take. Mostly me talking, sometimes me being wrong. If I'm wrong, tell me. I can take it.
+
+Today is one idea. Own your stack. Stop renting it.
+
+Quick translation. Your stack is everything your business runs on. Your email. Your website. Where your files live. Your phone system. The tools your team opens every morning.
+
+And no, it's not a pancake thing. I get that a lot. Okay, I've never gotten that. I just thought it would be funny.
+
+Most of us rent almost all of it. A monthly subscription for this, another one for that. And that's fine. Renting is fine. Please do not go build your own email server in the garage.
+
+The problem is renting without knowing you're renting. That's the part that bites you.
+
+Here's a little test. If one of your tools doubled its price next month, or changed its rules, or just disappeared, do you know what you'd do?
+
+Yeah. Most of us would say a word I can't say on the show. Totally normal.
+
+So here are three questions. Ten minutes, a coffee, and last month's bank statement.
+
+One. What are you paying for?
+
+Pull up the bank statement and write down every software name you see. Don't go from memory. Memory lies.
+
+I won't throw out a number, because I'd be making it up. But I'll tell you what people usually find. A free trial that turned into a charge. A tool somebody tried once. Two tools doing the same job because two people picked them.
+
+The subscription pile. Everybody has one.
+
+Two. Who has the keys?
+
+Your email login. Your website. Your domain name. Whose name is on the account?
+
+And this is a made-up example, so nobody feel called out. Say a friend's nephew built the website a few years ago. He set up the domain with his own email. Now he's off at college and nobody can reset the password.
+
+That's not a tech problem. That's a keys problem.
+
+If the person holding the login isn't you, or someone you trust today, you're renting a place where you don't have the key to the front door.
+
+Three. Can you get your stuff back?
+
+If everything vanished tomorrow morning, what could you recover, and how fast? Do you have a copy somewhere else? And here's the part people skip. Has anyone ever tried to restore it?
+
+A backup you've never tested is a hope. That one gets its own episode.
+
+Now, some of you are thinking, "Carlos, I'm busy. I rent this stuff so I don't have to think about it."
+
+Fair. I get it. Time is the real cost.
+
+So rent the things that are easy to replace. But keep control of the things that would really hurt to lose. Your customer list. Your files. Your domain. Your phone number.
+
+You can rent the coffee machine. Just keep the keys to the building.
+
+Okay. A little Spanish. I'm going to do some in every episode, because plenty of our neighbors here run their business in Spanish, and good advice shouldn't only work in one language.
+
+Tu negocio, tus llaves. Pregúntate: ¿quién tiene la contraseña de mi correo y de mi página web?
+
+In English: your business, your keys. Ask yourself, who has the password for my email and my website?
+
+Y otra más. Un respaldo que nunca has probado no es un respaldo. Es una esperanza.
+
+That one means: a backup you've never tested isn't a backup. It's a hope.
+
+Bien. Spanish done. Nobody got hurt.
+
+Here's something I keep noticing. Most small businesses around here don't have an IT department. They have one person who's good with computers, and that person also does three other jobs.
+
+That person is tired. If that's you, hi. This one's for you.
+
+The best thing you can do is write it all down once. One page. Tool name, who owns the login, where the data lives, when it renews. One line each.
+
+Then when something breaks on a Friday afternoon, you're not guessing. You just open the page.
+
+That's it. That's the whole episode. No big sales pitch. If you do just one thing this week, do the bank statement list.
+
+And one more thing. If this all sounds like a lot, it's not. You don't have to fix everything this week. You just have to know what you've got. Knowing is most of the battle. Honestly, it's like half of it.
+
+And I want to hear what you find. Not the private stuff. Just the funniest forgotten subscription. Send it to me.
+
+Better yet, tell me the one thing about your tech that slows your team down. The Wi-Fi that dies at two in the afternoon. The login nobody remembers. The printer. Always the printer. I'll read them, and some of them might turn into episodes.
+
+Okay, here's the part I actually care about.
+
+I want to meet more of you. The people building things in this valley. That's the point of this whole show.
+
+So first, follow me. Everything is linked at cc3po.com. I'm on X at III Cabrales, and on Instagram and YouTube at carlos c b r l s. That's where I'll post the clips, and where you can tell me what you want me to cover next.
+
+Second, get out to a local event. There are a few worth knowing about.
+
+The Chamber mixers. Coffee and Connections. And the CC3PO Lab meetup in January. Upcoming dates are always at cc3po.com.
+
+Go meet your neighbors. That's half of what this show is for.
+
+Bring a question. Or a coffee order. Either one works.
+
+Thanks for listening. I'm Carlos, aka CC3PO. Go check your login list.
+
+Own your stack. Stop renting it.

@@ -1,0 +1,109 @@
+---
+/**
+ * Site player bar. Pressing any [data-play] button loads that episode here.
+ * While you stay on the page it keeps playing as you scroll; across pages it
+ * remembers the episode and position (sessionStorage) and offers one-tap
+ * resume — a static site cannot stream across a full page load, and this
+ * does not pretend to.
+ */
+---
+<div class="playerbar" data-playerbar hidden>
+  <div class="playerbar-inner">
+    <button type="button" class="pb-toggle" data-pb-toggle aria-label="Play or pause the episode">
+      <svg class="pb-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="pb-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+    </button>
+    <div class="pb-meta">
+      <a class="pb-title" data-pb-title href="/episodes/">Episode</a>
+      <div class="pb-progress">
+        <input type="range" class="pb-seek" data-pb-seek min="0" max="100" value="0" step="0.1" aria-label="Seek" />
+        <span class="pb-time" data-pb-time>0:00 / 0:00</span>
+      </div>
+    </div>
+    <button type="button" class="pb-close" data-pb-close aria-label="Close the player">✕</button>
+  </div>
+  <audio data-pb-audio preload="metadata"></audio>
+</div>
+
+<script>
+  const bar = document.querySelector('[data-playerbar]');
+  const audio = bar?.querySelector('[data-pb-audio]') as HTMLAudioElement | null;
+  const titleEl = bar?.querySelector('[data-pb-title]') as HTMLAnchorElement | null;
+  const seek = bar?.querySelector('[data-pb-seek]') as HTMLInputElement | null;
+  const timeEl = bar?.querySelector('[data-pb-time]');
+  const toggleBtn = bar?.querySelector('[data-pb-toggle]');
+  const iconPlay = bar?.querySelector('.pb-icon-play');
+  const iconPause = bar?.querySelector('.pb-icon-pause');
+  const KEY = 'cc3po-podcast-player';
+  const fmt = (s: number) => { if (!isFinite(s)) return '0:00'; const m = Math.floor(s / 60); return `${m}:${String(Math.floor(s % 60)).padStart(2, '0')}`; };
+
+  function save() {
+    if (!audio || !audio.src) return;
+    try { sessionStorage.setItem(KEY, JSON.stringify({ src: audio.src, title: titleEl?.textContent || '', href: titleEl?.getAttribute('href') || '', t: audio.currentTime || 0 })); } catch {}
+  }
+  function setIcons() {
+    if (!audio || !iconPlay || !iconPause) return;
+    (iconPlay as HTMLElement).hidden = !audio.paused;
+    (iconPause as HTMLElement).hidden = audio.paused;
+    toggleBtn?.setAttribute('aria-label', audio.paused ? 'Play the episode' : 'Pause the episode');
+  }
+  function show() { if (bar) (bar as HTMLElement).hidden = false; document.body.classList.add('has-playerbar'); }
+
+  (window as any).cc3poPlay = (src: string, title: string, href: string) => {
+    if (!audio || !titleEl) return;
+    if (audio.src !== src) { audio.src = src; }
+    titleEl.textContent = title; titleEl.href = href;
+    show(); audio.play().catch(() => {}); save();
+  };
+
+  document.querySelectorAll('[data-play]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const el = btn as HTMLElement;
+      (window as any).cc3poPlay(el.dataset.play || '', el.dataset.playTitle || 'Episode', el.dataset.playHref || '/episodes/');
+      const seekTo = Number(el.dataset.seek || '');
+      if (audio && !Number.isNaN(seekTo) && el.dataset.seek) {
+        const apply = () => { audio.currentTime = seekTo; };
+        if (audio.readyState >= 1) apply(); else audio.addEventListener('loadedmetadata', apply, { once: true });
+      }
+    });
+  });
+
+  if (audio && bar) {
+    audio.addEventListener('play', setIcons);
+    audio.addEventListener('pause', () => { setIcons(); save(); });
+    audio.addEventListener('timeupdate', () => {
+      if (seek && audio.duration) seek.value = String((audio.currentTime / audio.duration) * 100);
+      if (timeEl) timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
+    });
+    audio.addEventListener('loadedmetadata', () => { if (timeEl) timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`; });
+    seek?.addEventListener('input', () => { if (audio.duration) audio.currentTime = (Number(seek.value) / 100) * audio.duration; });
+    toggleBtn?.addEventListener('click', () => { if (audio.paused) audio.play().catch(() => {}); else audio.pause(); });
+    bar.querySelector('[data-pb-close]')?.addEventListener('click', () => {
+      audio.pause(); (bar as HTMLElement).hidden = true; document.body.classList.remove('has-playerbar');
+      try { sessionStorage.removeItem(KEY); } catch {}
+    });
+    // Restore a previous episode (paused, one tap to resume where you left off).
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+      if (saved && saved.src && titleEl) {
+        audio.src = saved.src; titleEl.textContent = saved.title; titleEl.href = saved.href || '/episodes/';
+        audio.addEventListener('loadedmetadata', () => { if (saved.t > 0) audio.currentTime = Math.min(saved.t, (audio.duration || saved.t) - 1); }, { once: true });
+        show(); setIcons();
+      }
+    } catch {}
+  }
+</script>
+
+<style>
+  .playerbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 80; background: color-mix(in srgb, var(--brand-surface-dark) 96%, transparent); border-top: 1px solid color-mix(in srgb, var(--brand-paper) 14%, transparent); backdrop-filter: blur(10px); }
+  .playerbar-inner { max-width: 1080px; margin: 0 auto; padding: .6rem 1.25rem; display: flex; align-items: center; gap: .9rem; }
+  .pb-toggle { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--brand-navy); color: var(--brand-paper); display: grid; place-items: center; cursor: pointer; }
+  .pb-toggle:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); }
+  .pb-meta { flex: 1 1 auto; min-width: 0; }
+  .pb-title { color: var(--brand-paper); font-weight: 700; font-size: .95rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pb-progress { display: flex; align-items: center; gap: .7rem; }
+  .pb-seek { flex: 1 1 auto; accent-color: var(--semantic-info); height: 28px; font-size: 16px; }
+  .pb-time { color: var(--brand-silver); font-size: .82rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pb-close { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent); background: transparent; color: var(--semantic-muted); cursor: pointer; font-size: 1rem; }
+  body.has-playerbar { padding-bottom: 76px; }
+</style>

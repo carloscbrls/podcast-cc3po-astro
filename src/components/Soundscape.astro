@@ -53,28 +53,28 @@ const TRACKS = [
     album: 'The Human Interface',
     bpm: '92',
     mood: 'Zero lag / syncing souls',
-    accent: '#38bdf8',
+    accent: '#4fc3f7',
   },
   {
     title: 'Two-Factor Love',
     album: 'The Human Interface',
     bpm: '86',
     mood: 'Multi-layer authentication / proof of trust',
-    accent: '#fb923c',
+    accent: '#c56520',
   },
   {
     title: 'Touchscreen Soul',
     album: 'The Human Interface',
     bpm: '89',
     mood: 'Signal connection through glass',
-    accent: '#a78bfa',
+    accent: '#4fc3f7',
   },
   {
     title: 'Por Dentro Muerto',
     album: 'Dos Duelos',
     bpm: '—',
     mood: 'Dead inside, still transmitting',
-    accent: '#f43f5e',
+    accent: '#e8506b',
   },
 ];
 ---
@@ -160,8 +160,8 @@ const TRACKS = [
 
 <style>
   .soundscape {
-    background: #08080c;
-    color: #e8eaf0;
+    background: var(--brand-night);
+    color: var(--brand-paper);
     padding: 5rem 1.25rem;
   }
   .soundscape-inner {
@@ -172,7 +172,7 @@ const TRACKS = [
     font-size: 0.72rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: #22d3ee;
+    color: var(--semantic-info);
     text-align: center;
     margin: 0 0 1rem;
   }
@@ -182,13 +182,13 @@ const TRACKS = [
     line-height: 1.15;
     text-align: center;
     margin: 0 0 1.25rem;
-    color: #f4f6fa;
+    color: var(--brand-paper);
   }
   .soundscape-lede {
     max-width: 44rem;
     margin: 0 auto 3rem;
     text-align: center;
-    color: #a7b0c2;
+    color: var(--brand-silver);
     font-size: 1rem;
     line-height: 1.75;
   }
@@ -209,15 +209,15 @@ const TRACKS = [
     }
   }
   .soundscape-card {
-    background: #101017;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--brand-surface-dark);
+    border: 1px solid color-mix(in srgb, var(--brand-paper) 7%, transparent);
     border-radius: 0.75rem;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
   .soundscape-frame {
-    background: #000;
+    background: var(--brand-ink);
     aspect-ratio: 9 / 16;
     display: flex;
     align-items: center;
@@ -239,32 +239,32 @@ const TRACKS = [
     font-size: 0.62rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #22d3ee;
+    color: var(--semantic-info);
     margin-bottom: 0.4rem;
   }
   .soundscape-card-title {
     font-size: 1rem;
     font-weight: 600;
-    color: #f4f6fa;
+    color: var(--brand-paper);
     margin: 0 0 0.2rem;
     line-height: 1.35;
   }
   .soundscape-meta {
     font-size: 0.72rem;
-    color: #6b7280;
+    color: var(--brand-silver);
     margin: 0 0 0.55rem;
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   .soundscape-note {
     font-size: 0.85rem;
     line-height: 1.6;
-    color: #a7b0c2;
+    color: var(--brand-silver);
     margin: 0 0 0.9rem;
     flex-grow: 1;
   }
   .soundscape-dl {
     font-size: 0.8rem;
-    color: #22d3ee;
+    color: var(--semantic-info);
     text-decoration: none;
     font-weight: 600;
   }
@@ -275,11 +275,11 @@ const TRACKS = [
   .soundscape-sub {
     font-size: 1.3rem;
     font-weight: 500;
-    color: #f4f6fa;
+    color: var(--brand-paper);
     margin: 0 0 0.4rem;
   }
   .soundscape-sub-lede {
-    color: #a7b0c2;
+    color: var(--brand-silver);
     margin: 0 0 1.25rem;
     font-size: 0.92rem;
   }
@@ -299,8 +299,8 @@ const TRACKS = [
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    background: #101017;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: var(--brand-surface-dark);
+    border: 1px solid color-mix(in srgb, var(--brand-paper) 7%, transparent);
     border-left: 3px solid var(--accent);
     border-radius: 0.55rem;
     padding: 0.8rem 1rem;
@@ -320,16 +320,16 @@ const TRACKS = [
   .soundscape-track-title {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #e8eaf0;
+    color: var(--brand-paper);
   }
   .soundscape-track-album {
     font-size: 0.74rem;
-    color: #6b7280;
+    color: var(--brand-silver);
   }
   .soundscape-track-mood {
     margin-left: auto;
     font-size: 0.76rem;
-    color: #a7b0c2;
+    color: var(--brand-silver);
     text-align: right;
     white-space: nowrap;
     overflow: hidden;
@@ -342,8 +342,8 @@ const TRACKS = [
   }
 
   .soundscape-cta {
-    background: linear-gradient(135deg, #0f1b22, #171329);
-    border: 1px solid rgba(34, 211, 238, 0.22);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--brand-navy) 30%, var(--brand-night)), color-mix(in srgb, var(--brand-navy) 45%, var(--brand-night)));
+    border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, transparent);
     border-radius: 1rem;
     padding: 2.25rem 1.5rem;
     text-align: center;
@@ -351,11 +351,11 @@ const TRACKS = [
   .soundscape-cta-title {
     font-size: 1.6rem;
     font-weight: 300;
-    color: #f4f6fa;
+    color: var(--brand-paper);
     margin: 0 0 0.5rem;
   }
   .soundscape-cta p {
-    color: #a7b0c2;
+    color: var(--brand-silver);
     margin: 0 0 1.4rem;
     font-size: 0.95rem;
   }
@@ -367,8 +367,8 @@ const TRACKS = [
   }
   .soundscape-cta-btn {
     display: inline-block;
-    background: #22d3ee;
-    color: #06121a;
+    background: var(--semantic-info);
+    color: color-mix(in srgb, var(--brand-navy) 30%, var(--brand-night));
     font-weight: 700;
     padding: 0.8rem 1.4rem;
     border-radius: 0.6rem;
@@ -377,10 +377,10 @@ const TRACKS = [
   }
   .soundscape-cta-btn-secondary {
     background: transparent;
-    color: #e8eaf0;
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--brand-paper);
+    border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent);
   }
   .soundscape-cta-btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: color-mix(in srgb, var(--brand-paper) 7%, transparent);
   }
 </style>

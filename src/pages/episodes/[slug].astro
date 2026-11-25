@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import CaptureForm from '../../components/CaptureForm.astro';
+import ClipsRail from '../../components/ClipsRail.astro';
+import PersistentPlayer from '../../components/PersistentPlayer.astro';
+import { fetchEpisodes, CLIPS, EPISODE_CLIPS, type Episode } from '../../lib/episodes.ts';
+
+export async function getStaticPaths() {
+  const episodes = await fetchEpisodes();
+  return episodes.map((ep, i) => ({
+    params: { slug: ep.slug },
+    props: { ep, prev: episodes[i + 1] || null, next: episodes[i - 1] || null },
+  }));
+}
+
+interface Props { ep: Episode; prev: Episode | null; next: Episode | null; }
+const { ep, prev, next } = Astro.props;
+const pageUrl = `https://podcast.cc3po.com/episodes/${ep.slug}/`;
+const shareId = (ep.link.match(/share\.transistor\.fm\/s\/([a-z0-9]+)/) || [])[1] || '';
+const clips = CLIPS.filter((c) => (EPISODE_CLIPS[ep.num] || []).includes(c.file));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  url: pageUrl,
+  name: ep.title,
+  datePublished: ep.dateISO,
+  timeRequired: ep.durationISO,
+  description: ep.descText,
+  associatedMedia: { '@type': 'MediaObject', contentUrl: ep.audio },
+  partOfSeries: { '@type': 'PodcastSeries', name: 'CC3PO Podcast', url: 'https://podcast.cc3po.com/' },
+};
+---
+
+<Layout
+  title={`E${ep.num}: ${ep.title} — CC3PO Podcast`}
+  description={ep.descText.slice(0, 300)}
+  image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
+  siteName="CC3PO Podcast"
+  type="article"
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+  <SiteNav current="episodes" />
+
+  <article class="ep">
+    <p class="ep-crumb"><a href="/episodes/">← All episodes</a></p>
+    <div class="ep-head">
+      <img src="/images/cc3po-podcast-cover.jpg" alt="CC3PO Podcast cover art" class="ep-cover" width="180" height="180" />
+      <div>
+        <p class="ep-meta">Episode {ep.num} · {ep.date} · {ep.duration}</p>
+        <h1 class="ep-title">{ep.title}</h1>
+        <div class="ep-actions">
+          {ep.audio && <button type="button" class="btn btn-primary" data-play={ep.audio} data-play-title={`E${ep.num}: ${ep.title}`} data-play-href={`/episodes/${ep.slug}/`}>▶ Play here</button>}
+          {ep.link && <a href={ep.link} class="btn btn-outline" target="_blank" rel="noopener">Open in Transistor</a>}
+          {ep.audio && <a href={ep.audio} class="btn btn-outline">Download MP3</a>}
+        </div>
+      </div>
+    </div>
+
+    {shareId && (
+      <div class="player-wrap">
+        <iframe width="100%" height="180" frameborder="no" scrolling="no" seamless src={`https://share.transistor.fm/e/${shareId}`} title={`Player for episode ${ep.num}: ${ep.title}`} loading="lazy"></iframe>
+      </div>
+    )}
+
+    <section class="ep-notes" aria-labelledby="notes-h">
+      <h2 id="notes-h">Show notes</h2>
+      <div class="notes-body" set:html={ep.descHtml} />
+      <p class="disclosure">Voiced with an AI clone of Carlos's voice, approved by Carlos.</p>
+    </section>
+
+    {ep.chapters.length > 0 && (
+      <section class="ep-chapters" aria-labelledby="chapters-h">
+        <h2 id="chapters-h">Chapters</h2>
+        <ul>
+          {ep.chapters.map((ch) => (
+            <li><button type="button" class="chapter-btn" data-play={ep.audio} data-play-title={`E${ep.num}: ${ep.title}`} data-play-href={`/episodes/${ep.slug}/`} data-seek={ch.seconds}><span class="chapter-time">{ch.time}</span> {ch.label}</button></li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <ClipsRail clips={clips} heading="Clips from this episode" />
+
+    {ep.transcript && (
+      <section class="ep-transcript" id="transcript" aria-labelledby="transcript-h">
+        <h2 id="transcript-h">Transcript</h2>
+        <p class="transcript-note">{ep.transcriptSource === 'reviewed' ? 'Transcript reviewed for names and terms.' : 'Auto-generated transcript — names and terms may vary.'}</p>
+        {ep.transcript.map((p) => <p class="transcript-p">{p}</p>)}
+      </section>
+    )}
+
+    <section class="ep-capture">
+      <CaptureForm source="episode-page" episodeRef={ep.slug} heading="Get the next episode by email" />
+    </section>
+
+    <section class="ep-voice">
+      <h2>Answer back</h2>
+      <p>This show runs on listener questions. Record a voice message — it goes to Carlos's review queue, and with your permission it may air in a future episode.</p>
+      <a href="/voice/" class="btn btn-primary">Leave a voice message</a>
+    </section>
+
+    <nav class="ep-pager" aria-label="More episodes">
+      {next && <a href={`/episodes/${next.slug}/`} class="pager-link">← Newer: E{next.num} — {next.title}</a>}
+      {prev && <a href={`/episodes/${prev.slug}/`} class="pager-link">Older: E{prev.num} — {prev.title} →</a>}
+    </nav>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 CC3PO LLC · Lathrop, California</p>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="/follow/">Follow the show</a>
+        <a href="/insights">CC3PO Insights</a>
+        <a href="https://feeds.transistor.fm/cc3po-podcast">RSS</a>
+      </div>
+    </div>
+  </footer>
+  <PersistentPlayer />
+</Layout>
+
+<style>
+  .ep { max-width: 880px; margin: 0 auto; padding: 2.2rem 1.25rem 0; }
+  .ep-crumb a { color: var(--brand-silver); font-size: .92rem; }
+  .ep-head { display: flex; gap: 1.6rem; margin-top: 1.2rem; flex-wrap: wrap; }
+  .ep-cover { border-radius: var(--radius-md); width: 180px; height: 180px; box-shadow: 0 14px 40px color-mix(in srgb, var(--brand-ink) 55%, transparent); }
+  .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--semantic-info); font-weight: 700; font-family: var(--type-font-mono), monospace; }
+  .ep-title { font-size: 2.3rem; font-weight: 800; color: var(--brand-paper); line-height: 1.12; margin-top: .45rem; }
+  .ep-actions { display: flex; gap: .7rem; margin-top: 1.1rem; flex-wrap: wrap; }
+  .btn { display: inline-block; border-radius: var(--radius-sm); padding: .7rem 1.3rem; font-weight: 700; font-size: .95rem; border: 0; cursor: pointer; min-height: 44px; }
+  .btn-primary { background: var(--brand-navy); color: var(--brand-paper); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); color: var(--brand-paper); }
+  .btn-outline { border: 1px solid color-mix(in srgb, var(--brand-paper) 25%, transparent); color: var(--brand-paper); background: transparent; }
+  .btn-outline:hover { border-color: var(--semantic-info); color: var(--brand-paper); }
+  .player-wrap { margin-top: 1.8rem; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: var(--radius-md); padding: 1rem 1rem .4rem; }
+  .player-wrap iframe { border: 0; width: 100%; }
+  section { margin-top: 2.4rem; }
+  h2 { color: var(--brand-paper); font-size: 1.5rem; }
+  .notes-body { color: var(--semantic-muted); margin-top: .7rem; }
+  .notes-body a { text-decoration: underline; }
+  .notes-body p { margin-bottom: .8rem; }
+  .disclosure { margin-top: 1rem; color: var(--semantic-info); font-size: .9rem; border-left: 3px solid var(--brand-navy); padding-left: .7rem; }
+  .ep-chapters ul { list-style: none; margin-top: .8rem; display: grid; gap: .4rem; }
+  .chapter-btn { width: 100%; text-align: left; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); color: var(--brand-paper); border-radius: var(--radius-sm); padding: .7rem .9rem; font-size: .98rem; cursor: pointer; min-height: 44px; }
+  .chapter-btn:hover { border-color: var(--semantic-info); }
+  .chapter-time { font-family: var(--type-font-mono), monospace; color: var(--semantic-info); margin-right: .6rem; }
+  .transcript-note { color: var(--brand-silver); font-size: .9rem; margin-top: .4rem; }
+  .transcript-p { color: var(--semantic-muted); margin-top: .9rem; max-width: 44rem; }
+  .ep-voice p { color: var(--semantic-muted); margin: .6rem 0 1rem; max-width: 40rem; }
+  .ep-pager { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 2.6rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); padding-top: 1.2rem; }
+  .pager-link { color: var(--semantic-info); font-weight: 600; }
+  .footer { margin-top: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--brand-silver); font-size: .9rem; }
+  .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--semantic-muted); padding: .55rem 0; }
+  @media (max-width: 640px) { .ep-title { font-size: 1.8rem; } .ep-cover { width: 140px; height: 140px; } }
+</style>

@@ -1,0 +1,36 @@
+---
+import type { Clip } from '../lib/episodes.ts';
+interface Props { clips: Clip[]; heading?: string; }
+const { clips, heading = 'Short clips' } = Astro.props;
+---
+{clips.length > 0 && (
+  <div class="clips">
+    <h3 class="clips-title">{heading}</h3>
+    <p class="clips-note">Voiced with an AI clone of Carlos's voice, approved by Carlos. Tap a clip to play it — sound on, no autoplay.</p>
+    <div class="clips-row" tabindex="0" aria-label="Clips — scroll horizontally">
+      {clips.map((c) => (
+        <figure class="clip">
+          <video controls preload="none" poster={c.poster} playsinline width="270" height="480" aria-label={`Clip: ${c.title}`}>
+            <source src={c.file} type="video/mp4" />
+          </video>
+          <figcaption>
+            <span class="clip-title">{c.title} · {c.duration}</span>
+            <span class="clip-note">{c.note}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .clips { margin-top: 2rem; }
+  .clips-title { color: var(--brand-paper); font-size: 1.3rem; }
+  .clips-note { color: var(--semantic-muted); margin-top: .35rem; font-size: .94rem; }
+  .clips-row { display: flex; gap: 1rem; overflow-x: auto; padding: 1.1rem .1rem .6rem; scroll-snap-type: x proximity; }
+  .clip { flex: 0 0 auto; width: 200px; scroll-snap-align: start; }
+  .clip video { width: 200px; height: 356px; border-radius: var(--radius-md); background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .clip figcaption { margin-top: .55rem; display: grid; gap: .15rem; }
+  .clip-title { color: var(--brand-paper); font-weight: 700; font-size: .92rem; }
+  .clip-note { color: var(--brand-silver); font-size: .85rem; }
+</style>

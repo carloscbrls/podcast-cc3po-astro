@@ -1,0 +1,78 @@
+---
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../lib/public-config.ts';
+interface Props { source?: string; episodeRef?: string; heading?: string; blurb?: string; }
+const { source = 'podcast-site', episodeRef = '', heading = 'Get the next episode by email', blurb = 'One email when a new episode lands. No spam, no selling — that is the whole deal.' } = Astro.props;
+const uid = `cap-${Math.random().toString(36).slice(2, 9)}`;
+---
+<div class="capture" data-capture data-source={source} data-episode={episodeRef}>
+  <h3 class="capture-title">{heading}</h3>
+  <p class="capture-blurb">{blurb}</p>
+  <form class="capture-form" novalidate>
+    <label class="capture-label" for={`${uid}-email`}>Email address</label>
+    <div class="capture-row">
+      <input id={`${uid}-email`} name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </div>
+    <p class="capture-msg" role="alert" hidden></p>
+    <p class="capture-ok" role="status" hidden></p>
+  </form>
+  <noscript><p class="capture-blurb">This form needs JavaScript — or just subscribe in your podcast app from the <a href="/follow/">Follow page</a>.</p></noscript>
+</div>
+
+<script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY }}>
+  document.querySelectorAll('[data-capture]').forEach((box) => {
+    if (box.dataset.wired) return; box.dataset.wired = '1';
+    const form = box.querySelector('form');
+    const input = box.querySelector('input[type="email"]');
+    const msg = box.querySelector('.capture-msg');
+    const ok = box.querySelector('.capture-ok');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.hidden = true; ok.hidden = true;
+      const email = (input.value || '').trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.hidden = false; input.focus(); return;
+      }
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/podcast_subscribers`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify({ email, source: box.dataset.source || 'podcast-site', episode_ref: box.dataset.episode || null }),
+        });
+        if (res.status === 201) {
+          ok.textContent = 'You are on the list. The next episode will find you.';
+          ok.hidden = false; form.reset();
+        } else if (res.status === 409) {
+          ok.textContent = 'That email is already on the list — you are covered.';
+          ok.hidden = false;
+        } else {
+          msg.textContent = 'Something went wrong on our end. Please try again in a moment.';
+          msg.hidden = false;
+        }
+      } catch {
+        msg.textContent = 'No connection right now. Please try again in a moment.';
+        msg.hidden = false;
+      } finally { btn.disabled = false; }
+    });
+  });
+</script>
+
+<style>
+  .capture { background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: var(--radius-md); padding: 1.5rem; }
+  .capture-title { color: var(--brand-paper); font-size: 1.25rem; }
+  .capture-blurb { color: var(--semantic-muted); margin-top: .4rem; font-size: .96rem; }
+  .capture-form { margin-top: 1rem; }
+  .capture-label { display: block; color: var(--brand-paper); font-weight: 600; font-size: .92rem; margin-bottom: .45rem; }
+  .capture-row { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .capture-row input { flex: 1 1 240px; font-size: 16px; padding: .7rem .9rem; border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent); background: var(--brand-night); color: var(--brand-paper); min-height: 44px; }
+  .capture-row input:focus { outline: 2px solid var(--semantic-focus); outline-offset: 1px; }
+  .btn { display: inline-block; border-radius: var(--radius-sm); padding: .7rem 1.3rem; font-weight: 700; font-size: .95rem; border: 0; cursor: pointer; min-height: 44px; }
+  .btn-primary { background: var(--brand-navy); color: var(--brand-paper); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); }
+  .btn-primary:disabled { opacity: .6; cursor: wait; }
+  .capture-msg { color: var(--semantic-danger-tint); margin-top: .7rem; font-weight: 600; }
+  .capture-ok { color: var(--semantic-success); margin-top: .7rem; font-weight: 600; }
+</style>

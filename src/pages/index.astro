@@ -1,92 +1,34 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import CaptureForm from '../components/CaptureForm.astro';
+import ClipsRail from '../components/ClipsRail.astro';
+import PersistentPlayer from '../components/PersistentPlayer.astro';
+import { fetchEpisodes, PLATFORMS, CLIPS } from '../lib/episodes.ts';
 
 // Episodes come from the show's Transistor RSS feed at build time,
 // so a new episode appears here on the next deploy after it publishes.
-interface Ep { num: string; title: string; date: string; iso: string; desc: string; audio: string; link: string; duration: string; secs: number; }
-let episodes: Ep[] = [];
-try {
-  const res = await fetch('https://feeds.transistor.fm/cc3po-podcast');
-  const xml = await res.text();
-  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
-  episodes = items.map((it) => {
-    const pick = (tag: string) => {
-      const m = it.match(new RegExp(`<${tag}>([\\s\\S]*?)</${tag}>`));
-      return m ? m[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim() : '';
-    };
-    const enc = it.match(/<enclosure[^>]*url="([^"]+)"/);
-    const secs = parseInt(pick('itunes:duration')) || 0;
-    const d = new Date(pick('pubDate'));
-    return {
-      num: pick('itunes:episode') || '',
-      title: pick('title'),
-      date: isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Los_Angeles' }),
-      iso: isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10),
-      desc: pick('description').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(),
-      audio: enc ? enc[1] : '',
-      link: pick('link'),
-      duration: secs ? `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}` : '',
-      secs,
-    };
-  }).filter((e) => e.title);
-} catch (e) { /* fall back below */ }
-if (!episodes.length) {
-  episodes = [{
-    num: '1', title: 'Own Your Stack', date: 'Nov 23, 2026', iso: '2026-11-23',
-    desc: 'One idea in plain words for Central Valley small businesses: own your stack — the tools, accounts, and systems your business runs on should answer to you, not the other way around. Plus a 10-minute homework task and a short Spanish segment.',
-    audio: 'https://media.transistor.fm/0bbc4eb8/c841c488.mp3', link: 'https://share.transistor.fm/s/0bbc4eb8', duration: '6:42', secs: 402,
-  }];
-}
+const episodes = await fetchEpisodes();
+const latest = episodes[0];
 
-const platforms = [
-  { name: 'Apple Podcasts', href: 'https://podcasts.apple.com/podcast/cc3po-podcast/id6838596218' },
-  { name: 'Spotify', href: 'https://open.spotify.com/show/1Ix82Mlcww5eTH7xXnkVL7' },
-  { name: 'Amazon Music', href: 'https://music.amazon.com/podcasts/4956d5c2-697d-40ff-ae4f-1c17248795e5' },
-  { name: 'Pocket Casts', href: 'https://pca.st/m1ys6m9c' },
-  { name: 'Deezer', href: 'https://www.deezer.com/show/1003788401' },
-  { name: 'Podcast Addict', href: 'https://podcastaddict.com/podcast/cc3po-podcast/7390095' },
-  { name: 'Player FM', href: 'https://player.fm/series/series-3777810' },
-  { name: 'Overcast', href: 'https://overcast.fm/itunes6838596218' },
-  { name: 'Castbox', href: 'https://castbox.fm/vic/6838596218' },
-  { name: 'Castro', href: 'https://castro.fm/itunes/6838596218' },
-  { name: 'Goodpods', href: 'https://www.goodpods.com/podcasts-aid/6838596218' },
-  { name: 'RSS Feed', href: 'https://feeds.transistor.fm/cc3po-podcast' },
-];
-
-const seriesJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'PodcastSeries',
-  name: 'CC3PO Podcast',
-  url: 'https://podcast.cc3po.com/',
-  description: 'Carlos Cabrales III (CC3PO) — an IT professional and music producer in Lathrop, California — talks plain about the tech small businesses actually run on. One idea per episode, one 10-minute homework task, no selling.',
-  image: 'https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg',
-  webFeed: 'https://feeds.transistor.fm/cc3po-podcast',
-  author: { '@type': 'Person', name: 'Carlos Cabrales III' },
-  publisher: { '@type': 'Organization', name: 'CC3PO', url: 'https://cc3po.com' },
-  sameAs: [
-    'https://podcasts.apple.com/podcast/cc3po-podcast/id6838596218',
-    'https://open.spotify.com/show/1Ix82Mlcww5eTH7xXnkVL7',
-  ],
-};
-
-const episodeJsonLd = episodes.map((ep) => ({
-  '@context': 'https://schema.org',
-  '@type': 'PodcastEpisode',
-  name: ep.title,
-  episodeNumber: ep.num ? parseInt(ep.num, 10) : undefined,
-  url: ep.num === '1' ? 'https://podcast.cc3po.com/episodes/own-your-stack/' : 'https://podcast.cc3po.com/',
-  datePublished: ep.iso || undefined,
-  duration: ep.secs ? `PT${Math.floor(ep.secs / 60)}M${ep.secs % 60}S` : undefined,
-  description: ep.desc,
-  associatedMedia: ep.audio ? { '@type': 'MediaObject', contentUrl: ep.audio } : undefined,
-  partOfSeries: { '@type': 'PodcastSeries', name: 'CC3PO Podcast', url: 'https://podcast.cc3po.com/' },
-}));
+const platforms = PLATFORMS;
 
 const upcoming = [
   { num: 2, date: 'Tue, Dec 1, 2026' },
   { num: 3, date: 'Wed, Dec 9, 2026' },
   { num: 4, date: 'Tue, Dec 15, 2026' },
 ];
+
+const seriesLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
+  name: 'CC3PO Podcast',
+  url: 'https://podcast.cc3po.com/',
+  description: 'Carlos Cabrales III (CC3PO) — an IT professional and music producer in Lathrop, California — talks plain about the tech small businesses actually run on. One idea per episode, one 10-minute homework task, no selling.',
+  image: 'https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg',
+  author: { '@type': 'Person', name: 'Carlos Cabrales III' },
+  webFeed: 'https://feeds.transistor.fm/cc3po-podcast',
+};
 ---
 
 <Layout
@@ -94,22 +36,9 @@ const upcoming = [
   description="Carlos Cabrales III (CC3PO) — an IT professional and music producer in Lathrop, California — talks plain about the tech small businesses actually run on. One idea per episode, one 10-minute homework task, no selling."
   image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
   siteName="CC3PO Podcast"
-  jsonLd={[seriesJsonLd, ...episodeJsonLd]}
 >
-  <nav class="nav">
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="21"/></svg>
-        <span>CC3PO <strong>Podcast</strong></span>
-      </a>
-      <div class="nav-links">
-        <a href="#episodes">Episodes</a>
-        <a href="#subscribe">Subscribe</a>
-        <a href="#about">About</a>
-        <a href="/insights">CC3PO Insights</a>
-      </div>
-    </div>
-  </nav>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(seriesLd)} />
+  <SiteNav />
 
   <header class="hero">
     <div class="hero-inner">
@@ -130,7 +59,7 @@ const upcoming = [
 
   <section id="subscribe" class="subscribe">
     <h2 class="section-title">Listen Anywhere</h2>
-    <p class="section-desc">The show is live on every major podcast app. Pick your player:</p>
+    <p class="section-desc">The show is live on every major podcast app. Pick your player — or use the one door: <a href="/follow/">podcast.cc3po.com/follow</a></p>
     <div class="subscribe-grid">
       {platforms.map((p) => (
         <a href={p.href} class="subscribe-card" target="_blank" rel="noopener"><span>{p.name}</span></a>
@@ -140,21 +69,23 @@ const upcoming = [
 
   <section id="episodes" class="episodes">
     <h2 class="section-title">Episodes</h2>
+    <form class="ep-search" role="search" action="/episodes/" method="get">
+      <label for="home-q">Search episodes, notes, and transcripts</label>
+      <div class="ep-search-row">
+        <input id="home-q" name="q" type="search" placeholder="Try “backup” or “login”…" />
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+      </div>
+    </form>
     <div class="episode-list">
       {episodes.map((ep) => (
         <article class="episode-card">
-          <div class="ep-meta">E{ep.num} · {ep.date} · {ep.duration}</div>
-          <h3 class="ep-title">{ep.title}</h3>
-          <p class="ep-desc">{ep.desc}</p>
-          {ep.audio && (
-            <audio controls preload="none" src={ep.audio} class="ep-player">
-              Your browser does not support the audio element.
-            </audio>
-          )}
+          <p class="ep-meta">E{ep.num} · {ep.date} · {ep.duration}</p>
+          <h3 class="ep-title"><a href={`/episodes/${ep.slug}/`}>{ep.title}</a></h3>
+          <p class="ep-desc">{ep.descText}</p>
           <div class="ep-actions">
-            {ep.link && <a href={ep.link} class="btn btn-primary btn-sm" target="_blank" rel="noopener">Play Episode</a>}
+            <button type="button" class="btn btn-primary btn-sm" data-play={ep.audio} data-play-title={`E${ep.num}: ${ep.title}`} data-play-href={`/episodes/${ep.slug}/`}>▶ Play</button>
+            <a href={`/episodes/${ep.slug}/`} class="btn btn-outline btn-sm">Notes & transcript</a>
             {ep.audio && <a href={ep.audio} class="btn btn-outline btn-sm">Download MP3</a>}
-            {ep.num === '1' && <a href="/episodes/own-your-stack/" class="btn btn-outline btn-sm">Transcript</a>}
           </div>
         </article>
       ))}
@@ -168,6 +99,8 @@ const upcoming = [
       <div class="schedule-row"><span class="schedule-ep">Episode 5</span><span class="schedule-date">Tue, Jan 5, 2027</span></div>
       <div class="schedule-row"><span class="schedule-ep">Episode 6</span><span class="schedule-date">Tue, Jan 12, 2027</span></div>
     </div>
+
+    <ClipsRail clips={CLIPS} />
   </section>
 
   <section id="about" class="about">
@@ -189,6 +122,27 @@ const upcoming = [
     <p class="about-note">Carlos Cabrales III (CC3PO) works in IT in California's Central Valley and produces music as CC3PO. This is his solo show. The Village's show, <a href="/insights">CC3PO Insights</a>, lives on its own page.</p>
   </section>
 
+  <section class="voice-cta">
+    <div class="voice-card">
+      <h2>Be part of the show</h2>
+      <p>Carlos reads every listener message — and the best questions become episodes. Record a voice message up to two minutes: the thing that slows your team down, the question you keep meaning to ask. It goes to a private review queue, and nothing airs without your permission.</p>
+      <a href="/voice/" class="btn btn-primary">Leave a voice message</a>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <h2 class="section-title">What listeners say</h2>
+    <p class="reviews-empty">The show is new — reviews are just starting to land, and this wall is waiting for its first ones. If an episode helped, a review is the best way to tell Carlos to make more:</p>
+    <div class="ep-actions">
+      <a href="https://podcasts.apple.com/podcast/cc3po-podcast/id6838596218" class="btn btn-outline btn-sm" target="_blank" rel="noopener">Review on Apple Podcasts</a>
+      <a href="https://open.spotify.com/show/1Ix82Mlcww5eTH7xXnkVL7" class="btn btn-outline btn-sm" target="_blank" rel="noopener">Open in Spotify</a>
+    </div>
+  </section>
+
+  <section class="capture-section">
+    <CaptureForm source="homepage" />
+  </section>
+
   <section class="also">
     <div class="also-card">
       <h2>Also from CC3PO</h2>
@@ -208,75 +162,82 @@ const upcoming = [
       </div>
     </div>
   </footer>
+  <PersistentPlayer />
 </Layout>
 
 <style>
-  .nav { position: sticky; top: 0; z-index: 50; background: rgba(10,10,10,.92); backdrop-filter: blur(8px); border-bottom: 1px solid #1f2937; }
-  .nav-inner { max-width: 1080px; margin: 0 auto; padding: .9rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .nav-logo { display: flex; align-items: center; gap: .55rem; color: #f3f4f6; font-weight: 600; font-size: 1.05rem; }
-  .nav-logo strong { color: #60a5fa; }
-  .nav-links { display: flex; gap: 1.4rem; flex-wrap: wrap; }
-  .nav-links a { color: #d1d5db; font-size: .95rem; }
-  .nav-links a:hover { color: #60a5fa; }
-
   .hero { max-width: 1080px; margin: 0 auto; padding: 3.5rem 1.25rem 2rem; }
   .hero-inner { display: flex; gap: 2.2rem; align-items: center; flex-wrap: wrap; }
-  .hero-cover { border-radius: 18px; box-shadow: 0 18px 50px rgba(0,0,0,.55); width: 300px; height: 300px; }
+  .hero-cover { border-radius: 18px; box-shadow: 0 18px 50px color-mix(in srgb, var(--brand-ink) 55%, transparent); width: 300px; height: 300px; }
   .hero-text { flex: 1 1 320px; }
-  .hero-badge { display: inline-block; background: #1e3a8a; color: #bfdbfe; border-radius: 999px; padding: .3rem .85rem; font-size: .85rem; font-weight: 600; margin-bottom: 1rem; }
-  .hero-title { font-size: 3rem; font-weight: 800; color: #f9fafb; line-height: 1.05; }
-  .hero-title .accent { color: #60a5fa; }
-  .hero-tagline { font-size: 1.3rem; color: #e5e7eb; margin-top: .8rem; font-weight: 600; }
-  .hero-sub { color: #9ca3af; margin-top: .8rem; max-width: 34rem; }
-  .disclosure { margin-top: 1rem; color: #93c5fd; font-size: .9rem; border-left: 3px solid #2563eb; padding-left: .7rem; }
-  .player-wrap { margin-top: 2.2rem; background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 1.1rem 1.1rem .6rem; }
-  .player-label { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #9ca3af; margin-bottom: .5rem; }
+  .hero-badge { display: inline-block; background: var(--brand-navy); color: var(--brand-paper); border-radius: 999px; padding: .3rem .85rem; font-size: .85rem; font-weight: 600; margin-bottom: 1rem; }
+  .hero-title { font-size: 3rem; font-weight: 800; color: var(--brand-paper); line-height: 1.05; }
+  .hero-title .accent { color: var(--semantic-info); }
+  .hero-tagline { font-size: 1.3rem; color: var(--brand-paper); margin-top: .8rem; font-weight: 600; }
+  .hero-sub { color: var(--semantic-muted); margin-top: .8rem; max-width: 34rem; }
+  .disclosure { margin-top: 1rem; color: var(--semantic-info); font-size: .9rem; border-left: 3px solid var(--brand-navy); padding-left: .7rem; }
+  .player-wrap { margin-top: 2.2rem; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: 14px; padding: 1.1rem 1.1rem .6rem; }
+  .player-label { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-silver); margin-bottom: .5rem; }
   .player-wrap iframe { border: 0; width: 100%; }
 
   section { max-width: 1080px; margin: 0 auto; padding: 2.6rem 1.25rem 0; }
-  .section-title { font-size: 1.9rem; font-weight: 800; color: #f9fafb; }
-  .section-desc { color: #9ca3af; margin-top: .4rem; }
+  .section-title { font-size: 1.9rem; font-weight: 800; color: var(--brand-paper); }
+  .section-desc { color: var(--semantic-muted); margin-top: .4rem; }
+  .section-desc a, .about-note a { text-decoration: underline; }
 
   .subscribe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .8rem; margin-top: 1.4rem; }
-  .subscribe-card { display: flex; align-items: center; justify-content: center; text-align: center; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 1rem .6rem; color: #e5e7eb; font-weight: 600; font-size: .95rem; transition: border-color .2s, transform .2s; }
-  .subscribe-card:hover { border-color: #2563eb; color: #fff; transform: translateY(-2px); }
+  .subscribe-card { display: flex; align-items: center; justify-content: center; text-align: center; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: 12px; padding: 1rem .6rem; color: var(--brand-paper); font-weight: 600; font-size: .95rem; min-height: 44px; transition: border-color .2s, transform .2s; }
+  .subscribe-card:hover { border-color: var(--semantic-info); color: var(--brand-paper); transform: translateY(-2px); }
+
+  .ep-search { margin-top: 1.2rem; }
+  .ep-search label { display: block; font-weight: 600; color: var(--brand-paper); margin-bottom: .45rem; font-size: .95rem; }
+  .ep-search-row { display: flex; gap: .7rem; flex-wrap: wrap; }
+  .ep-search-row input { flex: 1 1 240px; font-size: 16px; padding: .6rem .9rem; border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent); background: var(--brand-surface-dark); color: var(--brand-paper); min-height: 44px; }
+  .ep-search-row input:focus { outline: 2px solid var(--semantic-focus); outline-offset: 1px; }
 
   .episode-list { display: grid; gap: 1rem; margin-top: 1.4rem; }
-  .episode-card { background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 1.4rem; }
-  .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: #60a5fa; font-weight: 700; }
-  .ep-title { font-size: 1.35rem; color: #f9fafb; margin-top: .35rem; }
-  .ep-desc { color: #9ca3af; margin-top: .5rem; }
-  .ep-player { width: 100%; margin-top: 1rem; }
+  .episode-card { background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: 14px; padding: 1.4rem; }
+  .ep-meta { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--semantic-info); font-weight: 700; }
+  .ep-title { font-size: 1.35rem; margin-top: .35rem; }
+  .ep-title a { color: var(--brand-paper); }
+  .ep-title a:hover { color: var(--semantic-info); }
+  .ep-desc { color: var(--semantic-muted); margin-top: .5rem; }
   .ep-actions { display: flex; gap: .7rem; margin-top: 1rem; flex-wrap: wrap; }
 
-  .schedule-title { color: #f3f4f6; margin-top: 2rem; font-size: 1.15rem; }
-  .schedule-list { margin-top: .8rem; border: 1px solid #1f2937; border-radius: 12px; overflow: hidden; }
-  .schedule-row { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 1.1rem; background: #0d1526; border-bottom: 1px solid #1f2937; }
+  .schedule-title { color: var(--brand-paper); margin-top: 2rem; font-size: 1.15rem; }
+  .schedule-list { margin-top: .8rem; border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: 12px; overflow: hidden; }
+  .schedule-row { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 1.1rem; background: color-mix(in srgb, var(--brand-navy) 30%, var(--brand-night)); border-bottom: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
   .schedule-row:last-child { border-bottom: 0; }
-  .schedule-ep { color: #e5e7eb; font-weight: 600; }
-  .schedule-date { color: #9ca3af; }
+  .schedule-ep { color: var(--brand-paper); font-weight: 600; }
+  .schedule-date { color: var(--brand-silver); }
 
   .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.4rem; }
-  .about-card { background: #111827; border: 1px solid #1f2937; border-radius: 14px; padding: 1.3rem; }
-  .about-card h3 { color: #f9fafb; margin-bottom: .45rem; }
-  .about-card p { color: #9ca3af; font-size: .96rem; }
-  .about-note { color: #9ca3af; margin-top: 1.4rem; max-width: 46rem; }
+  .about-card { background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: 14px; padding: 1.3rem; }
+  .about-card h3 { color: var(--brand-paper); margin-bottom: .45rem; }
+  .about-card p { color: var(--semantic-muted); font-size: .96rem; }
+  .about-note { color: var(--semantic-muted); margin-top: 1.4rem; max-width: 46rem; }
 
-  .also-card { background: linear-gradient(135deg, #0d1b3e, #111827); border: 1px solid #1e3a8a; border-radius: 16px; padding: 1.8rem; }
-  .also-card h2 { color: #f9fafb; font-size: 1.5rem; }
-  .also-card p { color: #c7d2fe; margin: .7rem 0 1.2rem; max-width: 44rem; }
+  .voice-card { background: linear-gradient(135deg, var(--brand-navy), var(--brand-surface-dark)); border: 1px solid var(--brand-navy); border-radius: 16px; padding: 1.8rem; }
+  .voice-card h2 { color: var(--brand-paper); font-size: 1.5rem; }
+  .voice-card p { color: var(--semantic-muted); margin: .7rem 0 1.2rem; max-width: 44rem; }
 
-  .btn { display: inline-block; border-radius: 10px; padding: .7rem 1.3rem; font-weight: 700; font-size: .95rem; }
-  .btn-primary { background: #2563eb; color: #fff; }
-  .btn-primary:hover { background: #1d4ed8; color: #fff; }
-  .btn-outline { border: 1px solid #374151; color: #e5e7eb; }
-  .btn-outline:hover { border-color: #60a5fa; color: #fff; }
+  .reviews-empty { color: var(--semantic-muted); margin-top: .6rem; max-width: 44rem; }
+
+  .also-card { background: linear-gradient(135deg, var(--brand-navy), var(--brand-surface-dark)); border: 1px solid var(--brand-navy); border-radius: 16px; padding: 1.8rem; }
+  .also-card h2 { color: var(--brand-paper); font-size: 1.5rem; }
+  .also-card p { color: var(--semantic-muted); margin: .7rem 0 1.2rem; max-width: 44rem; }
+
+  .btn { display: inline-block; border-radius: 10px; padding: .7rem 1.3rem; font-weight: 700; font-size: .95rem; border: 0; cursor: pointer; min-height: 44px; }
+  .btn-primary { background: var(--brand-navy); color: var(--brand-paper); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); color: var(--brand-paper); }
+  .btn-outline { border: 1px solid color-mix(in srgb, var(--brand-paper) 25%, transparent); color: var(--brand-paper); }
+  .btn-outline:hover { border-color: var(--semantic-info); color: var(--brand-paper); }
   .btn-sm { padding: .5rem 1rem; font-size: .88rem; }
 
-  .footer { margin-top: 3.5rem; border-top: 1px solid #1f2937; }
-  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: #6b7280; font-size: .9rem; }
+  .footer { margin-top: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--brand-silver); font-size: .9rem; }
   .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
-  .footer-links a { color: #9ca3af; }
+  .footer-links a { color: var(--semantic-muted); padding: .55rem 0; }
 
   @media (max-width: 640px) {
     .hero-title { font-size: 2.2rem; }

@@ -1,4 +1,6 @@
 ---
+import '../styles/tokens.css';
+
 interface Props {
   title: string;
   description?: string;
@@ -6,20 +8,16 @@ interface Props {
   url?: string;
   type?: string;
   siteName?: string;
-  jsonLd?: object | object[];
 }
 
-const {
-  title,
-  description = 'CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.',
+const { 
+  title, 
+  description = 'CC3PO Insights Podcast — Real Businesses. Real Data. Real Fixes.', 
   image = 'https://podcast.cc3po.com/cc3po-podcast-og.png',
   url = Astro.url.href,
   type = 'website',
-  siteName = 'CC3PO Insights',
-  jsonLd
+  siteName = 'CC3PO Insights'
 } = Astro.props;
-
-const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
 ---
@@ -52,17 +50,14 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
     <meta name="twitter:site" content="@cc3po3" />
     <meta name="twitter:creator" content="@cc3po3" />
     
-    {jsonLdList.map((ld) => (
-      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    ))}
-
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <slot name="head" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -76,13 +71,15 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://podcast.cc3po.com');
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #0a0a0a;
-    color: #e5e7eb;
+    font-family: var(--type-font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--brand-night);
+    color: var(--brand-paper);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  a { color: #60a5fa; text-decoration: none; transition: color .2s; }
-  a:hover { color: #60a5fa; }
-  ::selection { background: #2563eb; color: #fff; }
+  a { color: var(--semantic-info); text-decoration: none; transition: color .2s; }
+  a:hover { color: var(--semantic-info); }
+  ::selection { background: var(--brand-navy); color: var(--brand-paper); }
+  .skip-link { position: absolute; left: -9999px; top: 0; background: var(--brand-navy); color: var(--brand-paper); padding: .6rem 1rem; z-index: 100; border-radius: 0 0 var(--radius-sm) 0; }
+  .skip-link:focus { left: 0; }
 </style>

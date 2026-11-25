@@ -1,0 +1,210 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import { fetchEpisodes } from '../lib/episodes.ts';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../lib/public-config.ts';
+
+const episodes = await fetchEpisodes();
+---
+
+<Layout
+  title="Leave a Voice Message — CC3PO Podcast"
+  description="Record a voice message for the CC3PO Podcast. Listener questions and stories go to Carlos's review queue — and with your permission, may air in a future episode."
+  image="https://podcast.cc3po.com/images/cc3po-podcast-cover.jpg"
+  siteName="CC3PO Podcast"
+>
+  <SiteNav current="voice" />
+  <div class="wrap">
+    <h1>Leave a voice message</h1>
+    <p class="lede">This show runs on listener questions. Tell Carlos the one thing about your tech that slows your team down, ask the question you keep meaning to ask, or share the funniest forgotten subscription you found. Up to two minutes.</p>
+    <p class="how">How it works: your recording goes to a private review queue — nothing is public. Carlos listens first. If your message might air, it only does with the permission you give below, and nothing airs without a final human OK.</p>
+
+    <form id="voice-form" class="voice-form" novalidate>
+      <div class="recorder" data-state="idle">
+        <button type="button" id="rec-btn" class="rec-btn">
+          <span class="rec-dot" aria-hidden="true"></span><span id="rec-label">Start recording</span>
+        </button>
+        <p class="rec-time" id="rec-time" aria-live="off">0:00 / 2:00</p>
+        <p class="rec-status" id="rec-status" role="status">Your browser will ask for microphone permission.</p>
+        <audio id="rec-preview" controls hidden></audio>
+        <div class="rec-alt">
+          <label for="rec-file">No microphone handy? Upload an audio file instead:</label>
+          <input type="file" id="rec-file" accept="audio/*" />
+        </div>
+      </div>
+
+      <label class="field-label" for="vm-name">Your name (optional)</label>
+      <input id="vm-name" name="name" type="text" autocomplete="name" placeholder="First name is fine" />
+
+      <label class="field-label" for="vm-email">Email (optional — only if you want a reply)</label>
+      <input id="vm-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+
+      <label class="field-label" for="vm-episode">About which episode? (optional)</label>
+      <select id="vm-episode" name="episode">
+        <option value="">General question / new topic</option>
+        {episodes.map((ep) => <option value={ep.slug}>E{ep.num} — {ep.title}</option>)}
+      </select>
+
+      <label class="consent">
+        <input type="checkbox" id="vm-consent" />
+        <span>Carlos may play this message (or part of it) on the CC3PO Podcast, with my first name if I gave one.</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary" id="vm-submit">Send the message</button>
+      <p class="form-msg" id="vm-msg" role="alert" hidden></p>
+      <p class="form-ok" id="vm-ok" role="status" hidden></p>
+    </form>
+    <noscript><p class="how">The recorder needs JavaScript. You can also reach the show through <a href="https://cc3po.com">cc3po.com</a>.</p></noscript>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 CC3PO LLC · Lathrop, California</p>
+      <div class="footer-links">
+        <a href="https://cc3po.com">cc3po.com</a>
+        <a href="/episodes/">Episodes</a>
+        <a href="/follow/">Follow the show</a>
+        <a href="/insights">CC3PO Insights</a>
+      </div>
+    </div>
+  </footer>
+
+  <script define:vars={{ SUPABASE_URL, SUPABASE_ANON_KEY }}>
+    const MAX_SEC = 120;
+    const recBtn = document.getElementById('rec-btn');
+    const recLabel = document.getElementById('rec-label');
+    const recTime = document.getElementById('rec-time');
+    const recStatus = document.getElementById('rec-status');
+    const preview = document.getElementById('rec-preview');
+    const fileInput = document.getElementById('rec-file');
+    const form = document.getElementById('voice-form');
+    const msg = document.getElementById('vm-msg');
+    const ok = document.getElementById('vm-ok');
+    let mediaRecorder = null, chunks = [], audioBlob = null, audioExt = 'webm', startedAt = 0, timer = null, stream = null, recordedSecs = 0;
+
+    const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+    function setStatus(t) { recStatus.textContent = t; }
+    function haveAudio(blob, ext, secs) {
+      audioBlob = blob; audioExt = ext; recordedSecs = secs || 0;
+      preview.src = URL.createObjectURL(blob);
+      preview.hidden = false;
+      recTime.textContent = `${fmt(secs)} recorded`;
+      setStatus('Sounds good? Send it below — or record again to replace it.');
+      recLabel.textContent = 'Record again';
+    }
+    async function startRecording() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch { setStatus('Microphone permission was not given. You can upload an audio file instead.'); return; }
+      chunks = [];
+      const mime = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : '');
+      mediaRecorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      audioExt = (mediaRecorder.mimeType || 'audio/webm').includes('mp4') ? 'mp4' : 'webm';
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        const secs = Math.min(MAX_SEC, Math.round((Date.now() - startedAt) / 1000));
+        haveAudio(new Blob(chunks, { type: mediaRecorder.mimeType || 'audio/webm' }), audioExt, secs);
+        stream?.getTracks().forEach((t) => t.stop());
+        clearInterval(timer);
+      };
+      startedAt = Date.now();
+      mediaRecorder.start(250);
+      recLabel.textContent = 'Stop recording';
+      setStatus('Recording… tap Stop when you are done.');
+      timer = setInterval(() => {
+        const s = Math.floor((Date.now() - startedAt) / 1000);
+        recTime.textContent = `${fmt(s)} / 2:00`;
+        if (s >= MAX_SEC && mediaRecorder?.state === 'recording') mediaRecorder.stop();
+      }, 250);
+    }
+    recBtn.addEventListener('click', () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') { mediaRecorder.stop(); return; }
+      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+        setStatus('This browser cannot record audio. You can upload an audio file instead.');
+        return;
+      }
+      startRecording();
+    });
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files?.[0];
+      if (!f) return;
+      if (f.size > 10 * 1024 * 1024) { setStatus('That file is over 10 MB — please trim it and try again.'); return; }
+      const ext = (f.name.split('.').pop() || 'webm').toLowerCase();
+      haveAudio(f, ext, 0);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.hidden = true; ok.hidden = true;
+      if (!audioBlob) { msg.textContent = 'Record or upload a message first — the red button above.'; msg.hidden = false; recBtn.focus(); return; }
+      const email = (document.getElementById('vm-email').value || '').trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = 'That email does not look right — fix it, or leave it blank.'; msg.hidden = false; return; }
+      const btn = document.getElementById('vm-submit');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      const id = (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+      const path = `incoming/${id}.${audioExt}`;
+      try {
+        const up = await fetch(`${SUPABASE_URL}/storage/v1/object/voice-messages/${path}`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': (audioBlob.type || 'audio/webm').replace('audio/x-wav', 'audio/wav'), 'x-upsert': 'false' },
+          body: audioBlob,
+        });
+        if (!up.ok) throw new Error('upload');
+        const row = await fetch(`${SUPABASE_URL}/rest/v1/podcast_voice_messages`, {
+          method: 'POST',
+          headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify({
+            listener_name: (document.getElementById('vm-name').value || '').trim() || null,
+            contact_email: email || null,
+            episode_ref: document.getElementById('vm-episode').value || null,
+            audio_path: path,
+            duration_sec: recordedSecs || null,
+            consent_to_air: document.getElementById('vm-consent').checked,
+          }),
+        });
+        if (!row.ok) throw new Error('row');
+        ok.textContent = 'Message received — it is in the review queue. Thank you for being part of the show.';
+        ok.hidden = false;
+        form.reset(); preview.hidden = true; audioBlob = null;
+        recLabel.textContent = 'Start recording'; recTime.textContent = '0:00 / 2:00';
+        setStatus('Sent. Want to leave another? The mic is yours.');
+      } catch {
+        msg.textContent = 'The send did not go through. Your recording is still here — please try once more.';
+        msg.hidden = false;
+      } finally { btn.disabled = false; btn.textContent = 'Send the message'; }
+    });
+  </script>
+</Layout>
+
+<style>
+  .wrap { max-width: 720px; margin: 0 auto; padding: 2.4rem 1.25rem 0; }
+  h1 { font-size: 2.2rem; font-weight: 800; color: var(--brand-paper); }
+  .lede { color: var(--semantic-muted); margin-top: .6rem; }
+  .how { color: var(--brand-silver); margin-top: .8rem; font-size: .95rem; max-width: 40rem; }
+  .how a { text-decoration: underline; }
+  .voice-form { margin-top: 1.8rem; background: var(--brand-surface-dark); border: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); border-radius: var(--radius-md); padding: 1.5rem; }
+  .recorder { border: 1px dashed color-mix(in srgb, var(--brand-paper) 25%, transparent); border-radius: var(--radius-md); padding: 1.2rem; text-align: center; }
+  .rec-btn { display: inline-flex; align-items: center; gap: .6rem; min-height: 52px; padding: .8rem 1.6rem; border-radius: 999px; border: 0; background: var(--semantic-danger); color: var(--brand-paper); font-weight: 800; font-size: 1.05rem; cursor: pointer; }
+  .rec-btn:hover { background: color-mix(in srgb, var(--semantic-danger) 80%, var(--brand-paper)); }
+  .rec-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--brand-paper); display: inline-block; }
+  .rec-time { font-family: var(--type-font-mono), monospace; color: var(--brand-gold); margin-top: .7rem; }
+  .rec-status { color: var(--semantic-muted); font-size: .92rem; margin-top: .3rem; }
+  #rec-preview { width: 100%; margin-top: .9rem; }
+  .rec-alt { margin-top: 1rem; color: var(--brand-silver); font-size: .92rem; display: grid; gap: .4rem; justify-items: center; }
+  .rec-alt input { color: var(--semantic-muted); font-size: 16px; }
+  .field-label { display: block; color: var(--brand-paper); font-weight: 600; font-size: .92rem; margin: 1.1rem 0 .45rem; }
+  .voice-form input[type="text"], .voice-form input[type="email"], .voice-form select { width: 100%; font-size: 16px; padding: .7rem .9rem; border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--brand-paper) 22%, transparent); background: var(--brand-night); color: var(--brand-paper); min-height: 44px; }
+  .voice-form input:focus, .voice-form select:focus { outline: 2px solid var(--semantic-focus); outline-offset: 1px; }
+  .consent { display: flex; gap: .7rem; align-items: flex-start; margin-top: 1.2rem; color: var(--semantic-muted); font-size: .95rem; cursor: pointer; }
+  .consent input { width: 22px; height: 22px; flex: 0 0 auto; margin-top: .15rem; accent-color: var(--semantic-info); }
+  .btn { display: inline-block; border-radius: var(--radius-sm); padding: .8rem 1.5rem; font-weight: 700; font-size: 1rem; border: 0; cursor: pointer; min-height: 48px; margin-top: 1.3rem; width: 100%; }
+  .btn-primary { background: var(--brand-navy); color: var(--brand-paper); }
+  .btn-primary:hover { background: color-mix(in srgb, var(--brand-navy) 65%, var(--semantic-info)); }
+  .btn-primary:disabled { opacity: .6; cursor: wait; }
+  .form-msg { color: var(--semantic-danger-tint); margin-top: .8rem; font-weight: 600; }
+  .form-ok { color: var(--semantic-success); margin-top: .8rem; font-weight: 600; }
+  .footer { margin-top: 3.5rem; border-top: 1px solid color-mix(in srgb, var(--brand-paper) 10%, transparent); }
+  .footer-inner { max-width: 1080px; margin: 0 auto; padding: 1.6rem 1.25rem 2.2rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--brand-silver); font-size: .9rem; }
+  .footer-links { display: flex; gap: 1.2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--semantic-muted); padding: .55rem 0; }
+</style>

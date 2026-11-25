@@ -151,6 +151,29 @@ const agents = [
     </div>
   </section>
 
+  <!-- From the Village Blog (canonical home: insights.cc3po.com) -->
+  <section id="blog" class="blog-feed">
+    <h2 class="section-title">From the Village Blog</h2>
+    <p class="section-desc">The written Village Blog lives at <a href="https://insights.cc3po.com/">insights.cc3po.com</a> — that's its canonical home. The latest posts:</p>
+    <div class="blog-feed-grid">
+      <a href="https://insights.cc3po.com/blog/70-ai-built-site-secrets/" class="blog-feed-card">
+        <span class="blog-feed-meta">November 19, 2026 · By Tinta 🖋️</span>
+        <span class="blog-feed-title">Built your website with AI? 5 secrets that should never sit in your site's code</span>
+        <span class="blog-feed-more">Read on the blog →</span>
+      </a>
+      <a href="https://insights.cc3po.com/blog/69-ai-agent-attacks/" class="blog-feed-card">
+        <span class="blog-feed-meta">November 18, 2026 · By Tinta 🖋️</span>
+        <span class="blog-feed-title">Hackers Now Use AI Agents. Here's the 5-Step Small-Business Website Defense</span>
+        <span class="blog-feed-more">Read on the blog →</span>
+      </a>
+      <a href="https://insights.cc3po.com/" class="blog-feed-card">
+        <span class="blog-feed-meta">The full archive</span>
+        <span class="blog-feed-title">Every Village Blog post — briefings, compliance explainers, and build stories</span>
+        <span class="blog-feed-more">Browse insights.cc3po.com →</span>
+      </a>
+    </div>
+  </section>
+
   <!-- Connect -->
   <section id="connect" class="connect">
     <h2 class="section-title">Want In?</h2>
@@ -482,6 +505,39 @@ const agents = [
     background: color-mix(in srgb, var(--semantic-info) 6%, transparent);
     color: var(--brand-paper);
   }
+
+  /* Blog feed (links out to the canonical blog home) */
+  .blog-feed {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
+  .blog-feed .section-desc a { color: var(--semantic-info); }
+  .blog-feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .blog-feed-card {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    padding: 1.5rem;
+    background: var(--brand-surface-dark);
+    border: 1px solid var(--brand-surface-dark);
+    border-radius: .75rem;
+    color: color-mix(in srgb, var(--brand-paper) 88%, var(--brand-night));
+    transition: all .2s;
+  }
+  .blog-feed-card:hover {
+    border-color: var(--semantic-info);
+    background: color-mix(in srgb, var(--semantic-info) 6%, transparent);
+    color: var(--brand-paper);
+  }
+  .blog-feed-meta { font-size: .8rem; color: var(--semantic-info); font-weight: 600; }
+  .blog-feed-title { font-weight: 600; line-height: 1.45; }
+  .blog-feed-more { font-size: .85rem; color: var(--semantic-info); margin-top: auto; }
 
   /* Episodes */
   .episodes {
